@@ -1,2 +1,2 @@
 # bit-track-rover
-robot que lleva cosas
+este es el proyecto que tuvimos en mente y sentimos que podria ayudar significativamente a la industria Argentina. Es un carrito que lleva cosas de un punto "a" a uno "b", busca una ruta, es manejado por medio de una app, y nose q mmas 
