@@ -1,0 +1,94 @@
+#include <Servo.h>
+
+// --- CONSTANTES: Notación Snake Case ---
+const int PIN_TRIG = 2;
+const int PIN_ECHO = 3;
+const int PIN_SERVO = 9;
+const int PIN_IN1 = 4;
+const int PIN_IN2 = 5;
+const int PIN_IN3 = 6;
+const int PIN_IN4 = 7;
+
+// --- VARIABLES: Notación Camel Case ---
+const int anguloCerrado = 180;
+const int anguloAbierto = 90;
+const unsigned long tiempoEsperaAbrir = 6000;
+const unsigned long tiempoMantenerAbierta = 6000;
+
+unsigned long tiempoDeteccion = 0;
+bool estaDetectando = false;
+bool yaAbrioTapa = false;
+
+Servo motorTapa;
+
+void setup() {
+    // --- IDENTACIÓN: Sangría de un espacio a la derecha ---
+    motorTapa.attach(PIN_SERVO);
+    motorTapa.write(anguloCerrado);
+    
+    pinMode(PIN_TRIG, OUTPUT);
+    pinMode(PIN_ECHO, INPUT);
+    pinMode(PIN_IN1, OUTPUT);
+    pinMode(PIN_IN2, OUTPUT);
+    pinMode(PIN_IN3, OUTPUT);
+    pinMode(PIN_IN4, OUTPUT);
+    
+    Serial.begin(9600);
+}
+
+void loop() {
+    long duracion;
+    int distancia;
+
+    digitalWrite(PIN_TRIG, LOW);
+    delayMicroseconds(2);
+    digitalWrite(PIN_TRIG, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(PIN_TRIG, LOW);
+    
+    duracion = pulseIn(PIN_ECHO, HIGH);
+    distancia = duracion * 0.034 / 2;
+
+    if (distancia > 0 && distancia < 25) {
+        detenerMotores(); // Se interrumpe la marcha por detección de obstáculo
+
+        if (!estaDetectando) {
+            tiempoDeteccion = millis();
+            estaDetectando = true;
+            yaAbrioTapa = false;
+        }
+
+        if (estaDetectando && !yaAbrioTapa && (millis() - tiempoDeteccion > tiempoEsperaAbrir)) {
+            gestionarApertura(); // Se activa el mecanismo tras cumplirse el tiempo de espera
+            yaAbrioTapa = true;
+        }
+    } 
+    else {
+        avanzarMotores(); // El sistema reanuda el movimiento al despejarse el camino
+        estaDetectando = false;
+        yaAbrioTapa = false;
+        motorTapa.write(anguloCerrado);
+    }
+    delay(50);
+}
+
+// --- FUNCIONES: Notación Camel Case ---
+void gestionarApertura() {
+    motorTapa.write(anguloAbierto);
+    delay(tiempoMantenerAbierta); // La tapa se mantiene en posición de descarga
+    motorTapa.write(anguloCerrado);
+}
+
+void avanzarMotores() {
+    digitalWrite(PIN_IN1, HIGH);
+    digitalWrite(PIN_IN2, LOW);
+    digitalWrite(PIN_IN3, HIGH);
+    digitalWrite(PIN_IN4, LOW);
+}
+
+void detenerMotores() {
+    digitalWrite(PIN_IN1, LOW);
+    digitalWrite(PIN_IN2, LOW);
+    digitalWrite(PIN_IN3, LOW);
+    digitalWrite(PIN_IN4, LOW);
+}
