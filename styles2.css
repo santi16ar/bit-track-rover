@@ -1,0 +1,185 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', Verdana, sans-serif;
+}
+
+body {
+    background-color: #0d1b2a;
+}
+
+/* HEADER */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 100px;
+    background: #0a3d62;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+}
+
+.header .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.4em;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.header .nav a {
+    position: relative;
+    display: inline-block;
+    font-size: 1em;
+    color: #ffffff;
+    text-decoration: none;
+    margin-left: 40px;
+}
+
+.header .nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 100%;
+    height: 3px;
+    background: #ffffff;
+    border-radius: 5px;
+    transform: scaleX(0);
+    transition: .5s;
+}
+
+.header .nav a:hover::after {
+    transform: scaleX(1);
+}
+
+/* PAGINA COMPLETA */
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 100px 100px 60px;
+    gap: 32px;
+}
+
+/* TEXTO ARRIBA */
+.login-intro {
+    text-align: left;
+}
+
+.login-intro h2 {
+    font-size: 4em;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 8px;
+    margin-top: 4px;
+}
+
+.login-intro p {
+    font-size: 0.95em;
+    color: #8a93a8;
+}
+
+/* CARD DEL LOGIN */
+.wrapper-login {
+    width: 100%;
+    max-width: 40%;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 40px 36px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.wrapper-login h2 {
+    font-size: 1.6em;
+    color: #0a0d14;
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 32px 0;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: 1px solid #000000;
+    outline: none;
+    border-radius: 40px;
+    font-size: 1em;
+    padding: 0 16px 0 16px;
+}
+
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    font-size: 1em;
+    pointer-events: none;
+    transition: .5s;
+    color: #888;
+}
+
+.wrapper-login input:focus ~ label,
+.wrapper-login input:valid ~ label {
+    font-size: .75em;
+    top: -12px;
+    left: 12px;
+    background: #fff;
+    padding: 0 4px;
+    color: #0a3d62;
+}
+.btn {
+    width: 100%;
+    height: 50px;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    background: linear-gradient(90deg, #9e0e04, #ff6600);
+    box-shadow: 0 8px 10px rgba(0, 0, 0, .2);
+    cursor: pointer;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1em;
+    transition: transform .2s, box-shadow .2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, .3);
+}
+
+img{
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    border: none;
+}
+
+.login-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    width: 100%;
+}
+
+.login-img {
+    width: 400px;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 16px;
+}
