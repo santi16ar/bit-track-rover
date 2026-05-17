@@ -48,4 +48,4 @@ Bit-Track-Rover es un carrito robotizado diseñado para transportar objetos entr
 - Diseños mejorados de chasis y gestión de batería.
 
 ## Licencia
-Indicar aquí la licencia del proyecto (ej.: MIT, Apache 2.0).
+Orvion Robotics 2026
