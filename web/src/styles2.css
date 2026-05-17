@@ -183,3 +183,12 @@ img{
     object-fit: cover;
     border-radius: 16px;
 }
+
+.seccion-label {
+    font-size: 0.82em;
+    font-weight: 600;
+    color: #0a3d62;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 8px 0 -16px 4px;
+}

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles2.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Home — Bit-Track Rover</title>
+    <style>
+        .home-page {
+            min-height: 100vh;
+            padding: 120px 100px 60px;
+            color: #ffffff;
+        }
+
+        .bienvenido {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .bienvenido span {
+            color: #00b4d8;
+        }
+
+        .subtitulo {
+            color: #8a93a8;
+            font-size: 0.95em;
+            margin-bottom: 48px;
+        }
+
+        .panel {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: #ffffff10;
+            border: 1px solid #ffffff20;
+            border-radius: 16px;
+            padding: 32px;
+            min-width: 280px;
+            flex: 1;
+        }
+
+        .card h3 {
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #00b4d8;
+            margin-bottom: 20px;
+        }
+
+        .dato {
+            margin-bottom: 16px;
+        }
+
+        .dato-label {
+            font-size: 0.75em;
+            color: #8a93a8;
+            margin-bottom: 2px;
+        }
+
+        .dato-valor {
+            font-size: 1em;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .btn-cerrar {
+            margin-top: 48px;
+            padding: 12px 32px;
+            border-radius: 40px;
+            border: 1px solid #ffffff30;
+            background: transparent;
+            color: #ffffff;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-cerrar:hover {
+            background: #ffffff20;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">
+            <img src="coche-auto-conducido.png" alt="" height="36px">Bit-track rover
+        </a>
+        <nav class="nav">
+            <a href="index.html">inicio</a>
+        </nav>
+    </header>
+
+    <main class="home-page">
+        <h1 class="bienvenido">Bienvenido, <span id="nombre-usuario">...</span> 👋</h1>
+        <p class="subtitulo">Panel de tu institución</p>
+
+        <div class="panel">
+            <div class="card">
+                <h3>Datos del usuario</h3>
+                <div class="dato">
+                    <div class="dato-label">Nombre completo</div>
+                    <div class="dato-valor" id="d-nombre">—</div>
+                </div>
+                <div class="dato">
+                    <div class="dato-label">Email</div>
+                    <div class="dato-valor" id="d-email">—</div>
+                </div>
+                <div class="dato">
+                    <div class="dato-label">Rol</div>
+                    <div class="dato-valor" id="d-rol">—</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Datos institucionales</h3>
+                <div class="dato">
+                    <div class="dato-label">Hospital o clínica</div>
+                    <div class="dato-valor" id="d-hospital">—</div>
+                </div>
+                <div class="dato">
+                    <div class="dato-label">País y ciudad</div>
+                    <div class="dato-valor" id="d-ciudad">—</div>
+                </div>
+                <div class="dato">
+                    <div class="dato-label">Rovers solicitados</div>
+                    <div class="dato-valor" id="d-rovers">—</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-cerrar" id="btn-cerrar">Cerrar sesión</button>
+    </main>
+
+    <script type="module">
+        import { auth } from "./firebase.js";
+        import {
+            onAuthStateChanged, signOut
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import {
+            getFirestore, doc, getDoc
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const db = getFirestore();
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "index.html";
+                return;
+            }
+
+            const snap = await getDoc(doc(db, "usuarios", user.uid));
+            if (snap.exists()) {
+                const data = snap.data();
+                document.getElementById("nombre-usuario").textContent = data.nombre;
+                document.getElementById("d-nombre").textContent   = data.nombre;
+                document.getElementById("d-email").textContent    = data.email;
+                document.getElementById("d-rol").textContent      = data.rol;
+                document.getElementById("d-hospital").textContent = data.hospital;
+                document.getElementById("d-ciudad").textContent   = data.ciudad;
+                document.getElementById("d-rovers").textContent   = data.rovers + " rovers";
+            }
+        });
+
+        document.getElementById("btn-cerrar").addEventListener("click", () => {
+            signOut(auth).then(() => {
+                window.location.href = "index.html";
+            });
+        });
+    </script>
+</body>
+</html>
