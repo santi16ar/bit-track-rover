@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="stylesmisdatos.css">
+    <title>Mis datos</title>
+</head>
+
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">
+            <img src="coche-auto-conducido.png" alt="" height="36px">Bit-track rover
+        </a>
+        <nav class="nav">
+            <a href="">Mi rover</a>
+            <a href="home.html">Home</a>
+            <a href="index.html">inicio</a>
+        </nav>
+    </header>
+
+    <main class="home-page">
+        <h1 class="bienvenido">Bienvenido, <span id="nombre-usuario">...</span></h1>
+        <p class="subtitulo">Panel de tu institución</p>
+
+        <div class="panel">
+            <div class="card">
+                <h3>Datos del usuario</h3>
+                <div class="dato">
+                    <div class="dato-label">Nombre completo</div>
+                    <div class="dato-valor" id="d-nombre">—</div>
+                </div>
+                <div class="dato">
+                    <div class="dato-label">Email</div>
+                    <div class="dato-valor" id="d-email">—</div>
+                </div>
+                <div class="dato">
+                    <div class="dato-label">Rol</div>
+                    <div class="dato-valor" id="d-rol">—</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Datos institucionales</h3>
+                <div class="dato">
+                    <div class="dato-label">Hospital o clínica</div>
+                    <div class="dato-valor" id="d-hospital">—</div>
+                </div>
+                <div class="dato">
+                    <div class="dato-label">País y ciudad</div>
+                    <div class="dato-valor" id="d-ciudad">—</div>
+                </div>
+                <div class="dato">
+                    <div class="dato-label">Rovers solicitados</div>
+                    <div class="dato-valor" id="d-rovers">—</div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+<script type="module">
+    import { protegerPagina, cerrarSesion } from "./auth.js";
+
+    // Protege la página y obtiene el usuario guardado en sessionStorage
+    const usuario = protegerPagina();
+
+    // Rellena los datos — vienen del login, sin llamadas extra
+    document.getElementById("nombre-usuario").textContent = usuario.nombre;
+    document.getElementById("d-nombre").textContent       = usuario.nombre + " " + (usuario.apellido || "");
+    document.getElementById("d-email").textContent        = usuario.email;
+    document.getElementById("d-rol").textContent          = usuario.nombre_rol;
+    document.getElementById("d-hospital").textContent     = usuario.hospital;
+    document.getElementById("d-ciudad").textContent       = usuario.ciudad;
+    document.getElementById("d-rovers").textContent       = "—"; // si guardás rovers en la DB, aparece acá
+
+    // Cerrar sesión — si tenés un botón con id="btn-cerrar" funciona solo
+    const btnCerrar = document.getElementById("btn-cerrar");
+    if (btnCerrar) btnCerrar.addEventListener("click", cerrarSesion);
+</script>
+</html>

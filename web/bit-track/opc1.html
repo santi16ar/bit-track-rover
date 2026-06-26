@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles2.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Crear cuenta — Bit-Track Rover</title>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">
+            <img src="coche-auto-conducido.png" alt="" height="36px">Bit-track rover
+        </a>
+        <nav class="nav">
+            <a href="index.html">home</a>
+        </nav>
+    </header>
+
+    <main class="login-page">
+        <div class="login-intro">
+            <h2>Creá tu cuenta</h2>
+            <p>Registrá tu institución y comenzá a usar Bit-Track Rover</p>
+        </div>
+
+        <div class="login-row">
+            <div class="wrapper-login">
+                <h2>CREA UNA CUENTA</h2>
+
+                <div id="reg-error" style="display:none;color:#e74c3c;font-size:.9em;margin-bottom:10px;text-align:center"></div>
+
+                <p class="seccion-label">Datos institucionales</p>
+
+                <div class="input-box">
+                    <!-- Hospitales cargados desde MySQL via API -->
+                    <select id="hospital" required>
+                        <option value="" disabled selected>cargando hospitales...</option>
+                    </select>
+                </div>
+                <div class="input-box">
+                    <input type="number" id="rovers" required min="1" max="5">
+                    <label>cantidad de rovers que necesita</label>
+                </div>
+
+                <p class="seccion-label">Datos del usuario</p>
+
+                <div class="input-box">
+                    <input type="text" id="nombre" required minlength="1">
+                    <label>nombre y apellido</label>
+                </div>
+                <div class="input-box">
+                    <input type="text" id="rol" required minlength="1">
+                    <label>rol en la institución</label>
+                </div>
+                <div class="input-box">
+                    <input type="email" id="reg-email" required>
+                    <label>escribe tu email</label>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="reg-password" required minlength="6">
+                    <label>escribe tu contraseña</label>
+                </div>
+
+                <button class="btn" id="btn-registro">crear cuenta</button>
+                <p style="text-align:center; margin-top:16px; font-size:.9em;">
+                    ¿ya tenés cuenta? <a href="index.html#login" style="color:#0a3d62; font-weight:600;">iniciá sesión</a>
+                </p>
+            </div>
+
+            <img src="img1.jpg" alt="" class="login-img">
+        </div>
+    </main>
+
+    <!-- Sin Firebase — usa auth.js y api.php -->
+    <script type="module">
+        import { registro } from "./auth.js";
+
+        const API = "api.php";
+
+        // Carga hospitales desde MySQL
+        async function cargarHospitales() {
+            const select = document.getElementById("hospital");
+            try {
+                const res  = await fetch(`${API}?resource=hospitales`);
+                const data = await res.json();
+
+                if (!data.length) {
+                    select.innerHTML = `<option value="" disabled selected>no hay hospitales cargados todavía</option>`;
+                    return;
+                }
+
+                select.innerHTML = `<option value="" disabled selected>seleccioná tu hospital</option>`;
+                data.forEach(h => {
+                    const opt = document.createElement("option");
+                    opt.value       = h.id_hospital;
+                    opt.textContent = `${h.nombre} — ${h.ciudad}, ${h.pais}`;
+                    select.appendChild(opt);
+                });
+            } catch (e) {
+                select.innerHTML = `<option value="" disabled selected>error al cargar hospitales</option>`;
+                console.error(e);
+            }
+        }
+
+        cargarHospitales();
+
+        document.getElementById("btn-registro").addEventListener("click", async () => {
+            const email      = document.getElementById("reg-email").value.trim();
+            const password   = document.getElementById("reg-password").value;
+            const nombre     = document.getElementById("nombre").value.trim();
+            const hospitalId = document.getElementById("hospital").value;
+            const rovers     = document.getElementById("rovers").value;
+            const rol        = document.getElementById("rol").value.trim();
+            const errorEl    = document.getElementById("reg-error");
+
+            if (!nombre || !hospitalId || !rovers || !rol || !email || !password) {
+                errorEl.textContent = "Por favor completá todos los campos.";
+                errorEl.style.display = "block";
+                return;
+            }
+
+            errorEl.style.display = "none";
+            document.getElementById("btn-registro").textContent = "creando cuenta...";
+
+            // registro(email, password, nombre, hospitalId, rol, rovers)
+            await registro(email, password, nombre, hospitalId, rol, rovers);
+
+            document.getElementById("btn-registro").textContent = "crear cuenta";
+        });
+    </script>
+</body>
+</html>

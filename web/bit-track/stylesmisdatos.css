@@ -1,0 +1,165 @@
+html {
+    scroll-behavior: smooth;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #061620;
+}
+
+/* HEADER — azul medio como la landing */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 100px;
+    background: #1a3a5c;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+}
+
+.header .logo {
+    font-size: 1.8em;
+    color: #ffffff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header .nav a {
+    position: relative;
+    display: inline-block;
+    font-size: 1.1em;
+    color: #fff;
+    text-decoration: none;
+    margin-left: 40px;
+}
+
+.header .nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 100%;
+    height: 3px;
+    background: #00b4d8;
+    border-radius: 5px;
+    transform: scaleX(0);
+    transition: .5s;
+}
+
+.header .nav a:hover::after {
+    transform: scaleX(1);
+}
+
+/* HERO — fondo azul claro como la landing */
+.home-page {
+    min-height: 100vh;
+    padding: 120px 100px 80px;
+    background: #b8d4e8;
+}
+
+.bienvenido {
+    font-size: 3em;
+    font-weight: 700;
+    color: #0d1b2a;
+    margin-bottom: 8px;
+}
+
+.bienvenido span {
+    color: #0077b6;
+}
+
+.subtitulo {
+    color: #2c4a6e;
+    font-size: 0.95em;
+    margin-bottom: 48px;
+}
+
+/* CARDS */
+.panel {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: #ffffff40;
+    border: 1px solid #ffffff60;
+    border-radius: 16px;
+    padding: 32px;
+    min-width: 280px;
+    flex: 1;
+    backdrop-filter: blur(8px);
+}
+
+.card h3 {
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #0077b6;
+    margin-bottom: 20px;
+}
+
+.dato {
+    margin-bottom: 16px;
+}
+
+.dato-label {
+    font-size: 0.75em;
+    color: #2c4a6e;
+    margin-bottom: 2px;
+}
+
+.dato-valor {
+    font-size: 1em;
+    font-weight: 600;
+    color: #0d1b2a;
+}
+
+/* BOTÓN CERRAR SESIÓN */
+.btn-cerrar {
+    position: fixed;
+    top: 76px;
+    right: 100px;
+    z-index: 99;
+    padding: 10px 28px;
+    border-radius: 40px;
+    border: 1px solid #0d1b2a30;
+    background: transparent;
+    color: #0d1b2a;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-cerrar:hover {
+    background: #0d1b2a10;
+    transform: translateY(-2px);
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .header {
+        padding: 20px 32px;
+    }
+
+    .home-page {
+        padding: 120px 32px 60px;
+    }
+
+    .btn-cerrar {
+        right: 32px;
+    }
+}
