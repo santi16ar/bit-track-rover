@@ -1,6 +1,7 @@
-1. descargar web de GitHub
-2. descomprimir
-3. en archivos buscar XAMPP/htdocs y pasar la carpeta ahí
-4. abrir XAMPP e importar la base de datos (bdd en la carpeta)
-5. abrir localhost/bit-track/index.html
-6. ya debería funcionar
+1. Descargar el proyecto desde GitHub y descomprimir el ZIP
+2. Copiar la carpeta dentro de `XAMPP/htdocs/`
+3. Abrir phpMyAdmin en `localhost/phpmyadmin`
+4. Crear una nueva base de datos llamada **`hospital_robots`**
+5. Entrar a esa base de datos → **Importar** → seleccionar el archivo `.sql` de la carpeta del proyecto → **Continuar**
+6. Abrir XAMPP y asegurarse de que **Apache** y **MySQL** estén corriendo (en verde)
+7. Abrir en el navegador: `localhost/bit-track/index.html`
