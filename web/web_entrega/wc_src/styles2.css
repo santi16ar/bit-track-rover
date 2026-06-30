@@ -9,7 +9,6 @@ body {
     background-color: #0d1b2a;
 }
 
-/* HEADER */
 .header {
     position: fixed;
     top: 0;
@@ -59,7 +58,6 @@ body {
     transform: scaleX(1);
 }
 
-/* PAGINA COMPLETA */
 .login-page {
     min-height: 100vh;
     display: flex;
@@ -70,7 +68,6 @@ body {
     gap: 32px;
 }
 
-/* TEXTO ARRIBA */
 .login-intro {
     text-align: left;
 }

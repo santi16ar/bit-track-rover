@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styleshome.css">
+    <link rel="stylesheet" href="styleshmdp.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <title>Home — Bit-Track Rover</title>
 </head>
@@ -31,6 +31,9 @@
                 <h3>¿Que necesitas?</h3>
                 <p>Podes acceder a informacion de tu <span class="rover">ROVER</span> en el menu, tambien acceder a tus datos y volver a la landing page</p>
 
+                <!-- Muestra el código del rover asignado -->
+                <h3>Tu rover asignado: <span id="rover-codigo" style="color:#0a3d62"></span></h3>
+
                 <h2>TOCA ACA PARA LLAMAR A TU ROVER</h2>
                 <a href="#login">llamar</a>
 
@@ -44,34 +47,23 @@
         </div>
     </section>
 
-    <script type="module">
-        import { auth } from "./firebase.js";
-        import {
-            onAuthStateChanged, signOut
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import {
-            getFirestore, doc, getDoc
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    <script>
+        // Si no hay sesión, mandar al login
+        const usuarioGuardado = sessionStorage.getItem("usuario");
+        if (!usuarioGuardado) {
+            window.location.href = "index.html";
+        }
 
-        const db = getFirestore();
+        // Mostrar datos del usuario guardados al hacer login
+        const usuario = JSON.parse(usuarioGuardado);
+        document.getElementById("nombre-usuario").textContent = usuario.nombre;
+        document.getElementById("rover-codigo").textContent =
+        usuario.robot_codigo || "sin asignar";
 
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                window.location.href = "index.html";
-                return;
-            }
-
-            const snap = await getDoc(doc(db, "usuarios", user.uid));
-            if (snap.exists()) {
-                const data = snap.data();
-                document.getElementById("nombre-usuario").textContent = data.nombre;
-            }
-        });
-
+        // Cerrar sesión
         document.getElementById("btn-cerrar").addEventListener("click", () => {
-            signOut(auth).then(() => {
-                window.location.href = "index.html";
-            });
+            sessionStorage.removeItem("usuario");
+            window.location.href = "index.html";
         });
     </script>
 

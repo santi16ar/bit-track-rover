@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="stylesmisdatos.css">
+    <link rel="stylesheet" href="stylesdp.css">
     <title>Mis datos</title>
 </head>
 
@@ -35,8 +35,8 @@
                     <div class="dato-valor" id="d-email">—</div>
                 </div>
                 <div class="dato">
-                    <div class="dato-label">Rol</div>
-                    <div class="dato-valor" id="d-rol">—</div>
+                    <div class="dato-label">Rover asignado</div>
+                    <div class="dato-valor" id="d-rover">—</div>
                 </div>
             </div>
 
@@ -47,35 +47,34 @@
                     <div class="dato-valor" id="d-hospital">—</div>
                 </div>
                 <div class="dato">
-                    <div class="dato-label">País y ciudad</div>
+                    <div class="dato-label">Ciudad</div>
                     <div class="dato-valor" id="d-ciudad">—</div>
                 </div>
                 <div class="dato">
-                    <div class="dato-label">Rovers solicitados</div>
-                    <div class="dato-valor" id="d-rovers">—</div>
+                    <div class="dato-label">Modelo del rover</div>
+                    <div class="dato-valor" id="d-modelo">—</div>
                 </div>
             </div>
         </div>
     </main>
+
+    <script>
+        // Si no hay sesión, redirigir al login
+        const usuarioGuardado = sessionStorage.getItem("usuario");
+        if (!usuarioGuardado) {
+            window.location.href = "index.html";
+        }
+
+        // Llenar los datos con lo guardado en sessionStorage
+        const u = JSON.parse(usuarioGuardado);
+
+        document.getElementById("nombre-usuario").textContent = u.nombre;
+        document.getElementById("d-nombre").textContent       = u.nombre;
+        document.getElementById("d-email").textContent        = u.email;
+        document.getElementById("d-rover").textContent        = u.robot_codigo  || "sin asignar";
+        document.getElementById("d-hospital").textContent     = u.hospital       || "—";
+        document.getElementById("d-ciudad").textContent       = u.ciudad         || "—";
+        document.getElementById("d-modelo").textContent = u.robot_codigo || "—";
+    </script>
 </body>
-
-<script type="module">
-    import { protegerPagina, cerrarSesion } from "./auth.js";
-
-    // Protege la página y obtiene el usuario guardado en sessionStorage
-    const usuario = protegerPagina();
-
-    // Rellena los datos — vienen del login, sin llamadas extra
-    document.getElementById("nombre-usuario").textContent = usuario.nombre;
-    document.getElementById("d-nombre").textContent       = usuario.nombre + " " + (usuario.apellido || "");
-    document.getElementById("d-email").textContent        = usuario.email;
-    document.getElementById("d-rol").textContent          = usuario.nombre_rol;
-    document.getElementById("d-hospital").textContent     = usuario.hospital;
-    document.getElementById("d-ciudad").textContent       = usuario.ciudad;
-    document.getElementById("d-rovers").textContent       = "—"; // si guardás rovers en la DB, aparece acá
-
-    // Cerrar sesión — si tenés un botón con id="btn-cerrar" funciona solo
-    const btnCerrar = document.getElementById("btn-cerrar");
-    if (btnCerrar) btnCerrar.addEventListener("click", cerrarSesion);
-</script>
 </html>

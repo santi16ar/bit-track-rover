@@ -2,41 +2,30 @@ html {
     scroll-behavior: smooth;
 }
 
-* {
+*{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
 
-body {
-    background-color: #061620;
-}
-
-/* HEADER — azul medio como la landing */
-.header {
-    position: fixed;
+.header{
+    position: fixed; 
     top: 0;
     left: 0;
     width: 100%;
     padding: 20px 100px;
-    background: #1a3a5c;
+    background: #0a66a8;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    z-index: 100;
+    z-index: 100; 
 }
-
-.header .logo {
+.header .logo{
     font-size: 1.8em;
     color: #ffffff;
     text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 10px;
 }
-
-.header .nav a {
+.header .nav a{
     position: relative;
     display: inline-block;
     font-size: 1.1em;
@@ -45,48 +34,49 @@ body {
     margin-left: 40px;
 }
 
-.header .nav a::after {
+.header .nav a::after{
     content: '';
     position: absolute;
     left: 0;
     bottom: -4px;
     width: 100%;
     height: 3px;
-    background: #00b4d8;
+    background: #ffffff;
     border-radius: 5px;
     transform: scaleX(0);
     transition: .5s;
 }
 
-.header .nav a:hover::after {
-    transform: scaleX(1);
-}
 
-/* HERO — fondo azul claro como la landing */
+.header .nav a:hover::after{
+    transform: scaleX(1);
+
+}
 .home-page {
     min-height: 100vh;
-    padding: 120px 100px 80px;
-    background: #b8d4e8;
+    padding: 120px 100px 60px;
+    color: #301c1c;
 }
 
+body{
+    background-color: rgb(6, 37, 66);
+}
 .bienvenido {
     font-size: 3em;
     font-weight: 700;
-    color: #0d1b2a;
     margin-bottom: 8px;
 }
 
 .bienvenido span {
-    color: #0077b6;
+    color: #00b4d8;
 }
 
 .subtitulo {
-    color: #2c4a6e;
+    color: #8a93a8;
     font-size: 0.95em;
     margin-bottom: 48px;
 }
 
-/* CARDS */
 .panel {
     display: flex;
     gap: 32px;
@@ -94,20 +84,19 @@ body {
 }
 
 .card {
-    background: #ffffff40;
-    border: 1px solid #ffffff60;
+    background: #ffffff10;
+    border: 1px solid #ffffff20;
     border-radius: 16px;
     padding: 32px;
     min-width: 280px;
     flex: 1;
-    backdrop-filter: blur(8px);
 }
 
 .card h3 {
     font-size: 0.8em;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #0077b6;
+    color: #00b4d8;
     margin-bottom: 20px;
 }
 
@@ -117,27 +106,23 @@ body {
 
 .dato-label {
     font-size: 0.75em;
-    color: #2c4a6e;
+    color: #8a93a8;
     margin-bottom: 2px;
 }
 
 .dato-valor {
     font-size: 1em;
     font-weight: 600;
-    color: #0d1b2a;
+    color: #ffffff;
 }
 
-/* BOTÓN CERRAR SESIÓN */
 .btn-cerrar {
-    position: fixed;
-    top: 76px;
-    right: 100px;
-    z-index: 99;
-    padding: 10px 28px;
+    margin-top: 48px;
+    padding: 12px 32px;
     border-radius: 40px;
-    border: 1px solid #0d1b2a30;
+    border: 1px solid #ffffff30;
     background: transparent;
-    color: #0d1b2a;
+    color: #ffffff;
     font-size: 0.9em;
     cursor: pointer;
     transition: all 0.3s;
@@ -145,21 +130,10 @@ body {
 }
 
 .btn-cerrar:hover {
-    background: #0d1b2a10;
+    background: #ffffff20;
     transform: translateY(-2px);
 }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-    .header {
-        padding: 20px 32px;
-    }
-
-    .home-page {
-        padding: 120px 32px 60px;
-    }
-
-    .btn-cerrar {
-        right: 32px;
-    }
+h1{
+    color: #ffffff;
 }

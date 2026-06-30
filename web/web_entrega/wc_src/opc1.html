@@ -32,14 +32,9 @@
                 <p class="seccion-label">Datos institucionales</p>
 
                 <div class="input-box">
-                    <!-- Hospitales cargados desde MySQL via API -->
                     <select id="hospital" required>
                         <option value="" disabled selected>cargando hospitales...</option>
                     </select>
-                </div>
-                <div class="input-box">
-                    <input type="number" id="rovers" required min="1" max="5">
-                    <label>cantidad de rovers que necesita</label>
                 </div>
 
                 <p class="seccion-label">Datos del usuario</p>
@@ -47,10 +42,6 @@
                 <div class="input-box">
                     <input type="text" id="nombre" required minlength="1">
                     <label>nombre y apellido</label>
-                </div>
-                <div class="input-box">
-                    <input type="text" id="rol" required minlength="1">
-                    <label>rol en la institución</label>
                 </div>
                 <div class="input-box">
                     <input type="email" id="reg-email" required>
@@ -71,62 +62,73 @@
         </div>
     </main>
 
-    <!-- Sin Firebase — usa auth.js y api.php -->
-    <script type="module">
-        import { registro } from "./auth.js";
-
+    <script>
         const API = "api.php";
 
-        // Carga hospitales desde MySQL
         async function cargarHospitales() {
             const select = document.getElementById("hospital");
             try {
                 const res  = await fetch(`${API}?resource=hospitales`);
                 const data = await res.json();
-
                 if (!data.length) {
-                    select.innerHTML = `<option value="" disabled selected>no hay hospitales cargados todavía</option>`;
+                    select.innerHTML = `<option value="" disabled selected>no hay hospitales cargados</option>`;
                     return;
                 }
-
                 select.innerHTML = `<option value="" disabled selected>seleccioná tu hospital</option>`;
                 data.forEach(h => {
                     const opt = document.createElement("option");
                     opt.value       = h.id_hospital;
-                    opt.textContent = `${h.nombre} — ${h.ciudad}, ${h.pais}`;
+                    opt.textContent = `${h.nombre} — ${h.ciudad}`;
                     select.appendChild(opt);
                 });
             } catch (e) {
                 select.innerHTML = `<option value="" disabled selected>error al cargar hospitales</option>`;
-                console.error(e);
             }
         }
 
-        cargarHospitales();
-
         document.getElementById("btn-registro").addEventListener("click", async () => {
+            const nombre     = document.getElementById("nombre").value.trim();
             const email      = document.getElementById("reg-email").value.trim();
             const password   = document.getElementById("reg-password").value;
-            const nombre     = document.getElementById("nombre").value.trim();
             const hospitalId = document.getElementById("hospital").value;
-            const rovers     = document.getElementById("rovers").value;
-            const rol        = document.getElementById("rol").value.trim();
             const errorEl    = document.getElementById("reg-error");
+            const btn        = document.getElementById("btn-registro");
 
-            if (!nombre || !hospitalId || !rovers || !rol || !email || !password) {
+            if (!nombre || !email || !password || !hospitalId) {
                 errorEl.textContent = "Por favor completá todos los campos.";
                 errorEl.style.display = "block";
                 return;
             }
 
             errorEl.style.display = "none";
-            document.getElementById("btn-registro").textContent = "creando cuenta...";
+            btn.textContent = "creando cuenta...";
+            btn.disabled = true;
 
-            // registro(email, password, nombre, hospitalId, rol, rovers)
-            await registro(email, password, nombre, hospitalId, rol, rovers);
+            try {
+                const res  = await fetch(`${API}?resource=registro`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ nombre, email, password, fk_hospital: hospitalId })
+                });
+                const data = await res.json();
 
-            document.getElementById("btn-registro").textContent = "crear cuenta";
+                if (data.ok) {
+                    // Mostrar el rover asignado antes de redirigir
+                    alert(`¡Cuenta creada! Tu rover asignado es: ${data.rover_codigo}. Ahora iniciá sesión.`);
+                } else {
+                    errorEl.textContent = data.error || "Error al registrarse.";
+                    errorEl.style.display = "block";
+                }
+            } catch (e) {
+                errorEl.textContent = "Error de conexión con el servidor.";
+                errorEl.style.display = "block";
+            }
+
+            btn.textContent = "crear cuenta";
+            btn.disabled = false;
         });
+
+        cargarHospitales();
     </script>
 </body>
 </html>

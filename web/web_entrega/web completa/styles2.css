@@ -9,7 +9,6 @@ body {
     background-color: #0d1b2a;
 }
 
-/* HEADER */
 .header {
     position: fixed;
     top: 0;
@@ -59,7 +58,6 @@ body {
     transform: scaleX(1);
 }
 
-/* PAGINA COMPLETA */
 .login-page {
     min-height: 100vh;
     display: flex;
@@ -70,7 +68,6 @@ body {
     gap: 32px;
 }
 
-/* TEXTO ARRIBA */
 .login-intro {
     text-align: left;
 }
@@ -121,6 +118,23 @@ body {
     border-radius: 40px;
     font-size: 1em;
     padding: 0 16px 0 16px;
+}
+
+.input-box select {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: 1px solid #000000;
+    outline: none;
+    border-radius: 40px;
+    font-size: 1em;
+    padding: 0 16px;
+    color: #0a0d14;
+    cursor: pointer;
+}
+
+.input-box select:invalid {
+    color: #888;
 }
 
 .input-box label {
@@ -178,7 +192,7 @@ img{
 }
 
 .login-img {
-    width: 400px;
+    width: 700px;
     height: 500px;
     object-fit: cover;
     border-radius: 16px;
