@@ -1,7 +1,4 @@
 <?php
-// ============================================
-// api.php — versión simplificada
-// ============================================
 
 header("Content-Type: application/json; charset=utf-8");
 header("Access-Control-Allow-Origin: *");
@@ -10,10 +7,10 @@ header("Access-Control-Allow-Headers: Content-Type");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
 
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');   // ← cambiá por tu usuario
-define('DB_PASS', '');       // ← cambiá por tu contraseña
-define('DB_NAME', 'bit_track_bdd');
+define('DB_HOST', 'sql308.infinityfree.com');
+define('DB_USER', 'if0_42316669');   
+define('DB_PASS', 'aFZLljdcIM');       
+define('DB_NAME', 'if0_42316669_bit_track_rover');
 
 function getDB(): PDO {
   static $pdo = null;
@@ -40,13 +37,10 @@ $body     = json_decode(file_get_contents('php://input'), true) ?? [];
 
 try {
   $db = getDB();
-
-  // --- 1) LISTAR HOSPITALES (para el <select> del HTML) ---
   if ($resource === 'hospitales' && $method === 'GET') {
     json_out($db->query("SELECT id_hospital, nombre, ciudad FROM hospitales ORDER BY nombre")->fetchAll());
   }
 
-  // --- 2) REGISTRO (el rover se asigna automáticamente) ---
   if ($resource === 'registro' && $method === 'POST') {
     $nombre     = trim($body['nombre'] ?? '');
     $email      = trim($body['email'] ?? '');
@@ -57,14 +51,12 @@ try {
       json_out(['ok' => false, 'error' => 'Completá todos los campos'], 400);
     }
 
-    // Chequear email repetido
     $check = $db->prepare("SELECT id_usuario FROM usuarios WHERE email = ?");
     $check->execute([$email]);
     if ($check->fetch()) json_out(['ok' => false, 'error' => 'Ya existe una cuenta con ese email'], 409);
 
-    // Buscar el primer rover disponible del hospital automáticamente
-    $rcheck = $db->prepare("SELECT id_robot, codigo, modelo FROM robots WHERE fk_hospital = ? AND disponible = TRUE LIMIT 1");
-    $rcheck->execute([$hospitalId]);
+    $rcheck = $db->prepare("SELECT id_robot, codigo, modelo FROM robots WHERE disponible = TRUE LIMIT 1");
+    $rcheck->execute([]);
     $robot = $rcheck->fetch();
     if (!$robot) {
       json_out(['ok' => false, 'error' => 'No hay rovers disponibles en ese hospital'], 409);
@@ -72,7 +64,6 @@ try {
 
     $hash = password_hash($password, PASSWORD_BCRYPT);
 
-    // Transacción: crear usuario + marcar rover como no disponible
     $db->beginTransaction();
     $ins = $db->prepare("INSERT INTO usuarios (nombre, email, contrasena, fk_hospital, fk_robot) VALUES (?,?,?,?,?)");
     $ins->execute([$nombre, $email, $hash, $hospitalId, $robot['id_robot']]);
@@ -89,7 +80,6 @@ try {
     ], 201);
   }
 
-  // --- 4) LOGIN ---
   if ($resource === 'login' && $method === 'POST') {
     $email    = trim($body['email'] ?? '');
     $password = $body['password'] ?? '';
