@@ -41,12 +41,8 @@ CREATE TABLE usuarios (
   id_usuario   INT AUTO_INCREMENT PRIMARY KEY,
   nombre       VARCHAR(80)  NOT NULL,
   email        VARCHAR(120) NOT NULL UNIQUE,
-  contrasena   VARCHAR(255) NOT NULL, 
-  fk_hospital  INT NOT NULL,
+  contrasena   VARCHAR(255) NOT NULL,
   fk_robot     INT NULL,
-
-  CONSTRAINT fk_usuario_hospital FOREIGN KEY (fk_hospital)
-    REFERENCES hospitales(id_hospital) ON DELETE RESTRICT,
   CONSTRAINT fk_usuario_robot FOREIGN KEY (fk_robot)
     REFERENCES robots(id_robot) ON DELETE SET NULL
 );

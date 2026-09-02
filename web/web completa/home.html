@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styleshmdp.css?v=3">
-     <link rel="shortcut icon" href="logo.png-removebg-preview.png" type="image/x-icon">
+    <link rel="stylesheet" href="styleshmdp.css?v=4">
+    <link rel="shortcut icon" href="logo.png-removebg-preview.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <title>Home — Bit-Track Rover</title>
 </head>
@@ -17,63 +17,89 @@
             <a href="homemirover.html">Mi rover</a>
             <a href="homedp.html">Datos Personales</a>
             <a href="index.html">inicio</a>
+            <button class="btn-tema" id="btn-tema">🌙</button>
+            <button class="btn-cerrar" id="btn-cerrar">Cerrar sesión</button>
         </nav>
-           <button class="btn-cerrar" id="btn-cerrar">Cerrar sesión</button>
     </header>
+
     <section class="section">
-        <div class="content">
+        <div class="content anim-left">
             <h2 class="titulo-hero">Bienvenido, <span class="h1" id="nombre-usuario"></span></h2>
             <h3>Nos alegra volver a verte</h3>
             <br>
-
             <div class="contenido">
                 <h3>¿Que necesitas?</h3>
                 <p>Desde el menú podés consultar tu <span class="rover">ROVER</span> y actualizar tus datos.</p>
-
-                <!-- Muestra el código del rover asignado -->
                 <h3>Tu rover asignado: <span id="rover-codigo" style="color:#71c55b"></span></h3>
-
                 <h2>TOCA ACA PARA LLAMAR A TU ROVER</h2>
-                <a href="#login">Llamar al Rover</a>
-
+                <a href="homemirover.html">Llamar al Rover</a>
                 <h2>SOPORTE</h2>
-                <a href="#login">soporte</a>
+                <a href="#">soporte</a>
             </div>
         </div>
-
-        <div class="imgh1">
+        <div class="imgh1 anim-right">
             <img src="img1.jpg" width="800px">
         </div>
     </section>
 
-    <script>
-       
-        const usuarioGuardado = sessionStorage.getItem("usuario");
-        if (!usuarioGuardado) {
-            window.location.href = "index.html";
-        }
-
-        
-        const usuario = JSON.parse(usuarioGuardado);
-        document.getElementById("nombre-usuario").textContent = usuario.nombre;
-        document.getElementById("rover-codigo").textContent =
-        usuario.robot_codigo || "sin asignar";
-
-       
-        document.getElementById("btn-cerrar").addEventListener("click", () => {
-            sessionStorage.removeItem("usuario");
-            window.location.href = "index.html";
-        });
-    </script>
-
     <footer>
         <a href="#" class="logo-footer">Bit-track rover</a>
         <nav class="footer-nav">
-            <a href="#quienes somos">Quiénes somos</a>
+            <a href="#">Quiénes somos</a>
             <a href="#">Contacto</a>
             <a href="#">Reseñas</a>
         </nav>
         <p>© 2026 Orvion Robotics. Todos los derechos reservados.</p>
     </footer>
+
+    <script>
+        // Proteger página
+        const usuarioGuardado = sessionStorage.getItem("usuario");
+        if (!usuarioGuardado) window.location.href = "index.html";
+        const usuario = JSON.parse(usuarioGuardado);
+
+        // Mostrar datos
+        document.getElementById("nombre-usuario").textContent = usuario.nombre;
+        document.getElementById("rover-codigo").textContent = usuario.robot_codigo || "sin asignar";
+
+        // Cerrar sesión
+        document.getElementById("btn-cerrar").addEventListener("click", () => {
+            sessionStorage.removeItem("usuario");
+            window.location.href = "index.html";
+        });
+
+        // ============================================
+        // MODO OSCURO / CLARO
+        // ============================================
+        const btnTema = document.getElementById("btn-tema");
+
+        // Recordar preferencia
+        if (localStorage.getItem("tema") === "light") {
+            document.body.classList.add("light");
+            btnTema.textContent = "☀️";
+        }
+
+        btnTema.addEventListener("click", () => {
+            document.body.classList.toggle("light");
+            const esLight = document.body.classList.contains("light");
+            btnTema.textContent = esLight ? "☀️" : "🌙";
+            localStorage.setItem("tema", esLight ? "light" : "dark");
+        });
+
+        // ============================================
+        // ANIMACIONES AL HACER SCROLL
+        // ============================================
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll(".anim, .anim-left, .anim-right").forEach(el => {
+            observer.observe(el);
+        });
+    </script>
 </body>
 </html>

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles2.css">
-     <link rel="shortcut icon" href="logo.png-removebg-preview.png" type="image/x-icon">
+    <link rel="stylesheet" href="styles2.css?v=2">
+    <link rel="shortcut icon" href="logo.png-removebg-preview.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <title>Crear cuenta — Bit-Track Rover</title>
 </head>
@@ -19,13 +19,13 @@
     </header>
 
     <main class="login-page">
-        <div class="login-intro">
+        <div class="login-intro anim-up">
             <h2>Comenzá a optimizar la logística de tu hospital</h2>
             <p>Creá la cuenta de tu institución para acceder a Bit-Track Rover.</p>
         </div>
 
         <div class="login-row">
-            <div class="wrapper-login">
+            <div class="wrapper-login anim-left">
                 <h2>CREA UNA CUENTA</h2>
 
                 <div id="reg-error" style="display:none;color:#e74c3c;font-size:.9em;margin-bottom:10px;text-align:center"></div>
@@ -59,13 +59,31 @@
                 </p>
             </div>
 
-            <img src="img1.jpg" alt="" class="login-img">
+            <img src="img1.jpg" alt="" class="login-img anim-right">
         </div>
     </main>
 
     <script>
         const API = "api.php";
 
+        // ============================================
+        // ANIMACIONES AL APARECER
+        // ============================================
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll(".anim-up, .anim-left, .anim-right").forEach(el => {
+            observer.observe(el);
+        });
+
+        // ============================================
+        // CARGAR HOSPITALES
+        // ============================================
         async function cargarHospitales() {
             const select = document.getElementById("hospital");
             try {
@@ -87,6 +105,9 @@
             }
         }
 
+        // ============================================
+        // REGISTRO
+        // ============================================
         document.getElementById("btn-registro").addEventListener("click", async () => {
             const nombre     = document.getElementById("nombre").value.trim();
             const email      = document.getElementById("reg-email").value.trim();
@@ -114,8 +135,8 @@
                 const data = await res.json();
 
                 if (data.ok) {
-                    // Mostrar el rover asignado antes de redirigir
                     alert(`¡Cuenta creada! Tu rover asignado es: ${data.rover_codigo}. Ahora iniciá sesión.`);
+                    window.location.href = "index.html#login";
                 } else {
                     errorEl.textContent = data.error || "Error al registrarse.";
                     errorEl.style.display = "block";

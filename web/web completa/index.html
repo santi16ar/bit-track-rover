@@ -4,102 +4,110 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css?v=3">
+    <link rel="stylesheet" href="styles.css?v=4">
     <link rel="shortcut icon" href="logo.png-removebg-preview.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <title>bit-track rover</title>
 </head>
 <body>
     <header class="header">
-        <a href="#" class="logo"><img src="logo.png-removebg-preview.png" alt="" height="55px">Bit-track rover</a>
+        <a href="#" class="logo">
+            <img src="logo.png-removebg-preview.png" alt="" height="55px">Bit-track rover
+        </a>
         <nav class="nav">
             <a href="#caracteristicas">caracteristicas</a>
             <a href="#funcionamiento">funcionamiento</a>
             <a href="#beneficios">beneficios</a>
             <a href="#login" class="nav-cta">acceder</a>
+            <button class="btn-tema" id="btn-tema">🌙</button>
         </nav>
     </header>
 
+    <!-- HERO -->
     <section class="section">
-        <div class="content">        
+        <div class="content anim-left">        
             <h2 class="titulo-hero"><span class="hl">Automatiza</span> el transporte interno sin errores.</h2>
             <p>Bit-Track Rover automatiza el transporte interno para que el personal dedique más tiempo a los pacientes y menos al traslado de insumos.</p>
             <a href="#login">solicitar una demo</a>
         </div>
-        <div class="img1">          
+        <div class="img1 anim-right">          
             <img src="img1.jpg" width="800px">
         </div>
     </section> 
 
+    <!-- STATS -->
     <div class="stats-bar">
-        <div class="stat-item">
-            <span class="stat-num">+2.400</span>
-            <span class="stat-label"> Hasta entregas por día</span>
+        <div class="stat-item anim">
+            <span class="stat-num" data-target="2400" data-prefix="+">0</span>
+            <span class="stat-label">Hasta entregas por día</span>
         </div>
-        <div class="stat-item">
-            <span class="stat-num">40%</span>
+        <div class="stat-item anim">
+            <span class="stat-num" data-target="40" data-suffix="%">0</span>
             <span class="stat-label">Reducción de tiempos</span>
         </div>
-        <div class="stat-item">
-            <span class="stat-num">0</span>
+        <div class="stat-item anim">
+            <span class="stat-num" data-target="0">0</span>
             <span class="stat-label">Errores de entrega</span>
         </div>
-        <div class="stat-item">
-            <span class="stat-num">12h</span>
+        <div class="stat-item anim">
+            <span class="stat-num" data-target="12" data-suffix="h">0</span>
             <span class="stat-label">Autonomía de batería</span>
         </div>
     </div>
 
+    <!-- CARACTERÍSTICAS -->
     <section class="section2" id="caracteristicas">
-        <div class="content2">
+        <div class="content2 anim-left">
             <h2>CARACTERISTICAS</h2>
             <p>Bit-Track Rover es un robot autónomo que transporta insumos y medicamentos en hospitales siguiendo una línea guía. A través de una app, se puede solicitar la entrega, elegir el origen/destino y monitorear el recorrido en tiempo real. Funciona las 24 horas del día, cuenta con detección de obstáculos y un compartimiento seguro, garantizando el control total de los traslados para que el personal de salud pueda enfocarse en los pacientes.</p>
         </div>
-        <div class="img2">
+        <div class="img2 anim-right">
             <img src="img2.jpg" alt="" width="550px">
         </div>
     </section>
 
+    <!-- BENEFICIOS -->
     <section class="section3" id="beneficios">
-        <div class="content3">
+        <div class="content3 anim-left">
             <h2>BENEFICIOS</h2>
-            <p>Bit-Track Rover optimiza el tiempo del personal de salud al reducir traslados internos, mejora la seguridad mediante la trazabilidad de los envíos y se instala rápidamente sin obras. Además, opera las 24 horas y permite recuperar la inversión en menos de 18 meses.
-.</p>
+            <p>Bit-Track Rover optimiza el tiempo del personal de salud al reducir traslados internos, mejora la seguridad mediante la trazabilidad de los envíos y se instala rápidamente sin obras. Además, opera las 24 horas y permite recuperar la inversión en menos de 18 meses.</p>
         </div>
-        <div class="img3">
+        <div class="img3 anim-right">
             <img src="img3.jpg" alt="" width="550px">
         </div>
     </section>
 
+    <!-- FUNCIONAMIENTO -->
     <section class="section4" id="funcionamiento">
-        <div class="content4">
+        <div class="content4 anim-left">
             <h2>FUNCIONAMIENTO</h2>
             <p>El personal coloca el material a transportar — medicamentos, muestras, insumos o documentos — en el compartimiento seguro del rover. Luego, desde la app, solicita el envío indicando el destino dentro del hospital. Bit-Track Rover recibe la orden, sigue automáticamente la línea guía en el piso y llega al punto indicado sin intervención humana. Al llegar, notifica al destinatario para que retire el material. Simple, rápido y sin margen de error.</p>
         </div>
-        <div class="img4">
+        <div class="img4 anim-right">
             <img src="img4.jpg" alt="" width="550px">
         </div>
     </section>
 
+    <!-- STEPS -->
     <section class="steps-section">
-        <h2 class="steps-title">Simple de operar,<br>potente en resultado</h2>
+        <h2 class="steps-title anim">Simple de operar,<br>potente en resultado</h2>
         <div class="steps">
-            <div class="step">
+            <div class="step anim" style="transition-delay: 0s">
                 <div class="step-num">1</div>
                 <h3>Solicitud</h3>
                 <p>Solicita una entrega desde cualquier dispositivo.</p>
             </div>
-            <div class="step">
+            <div class="step anim" style="transition-delay: 0.15s">
                 <div class="step-num">2</div>
                 <h3>Carga</h3>
                 <p>Coloca el material de forma segura.</p>
             </div>
-            <div class="step">
+            <div class="step anim" style="transition-delay: 0.3s">
                 <div class="step-num">3</div>
                 <h3>Navegación</h3>
                 <p>El rover evita obstáculos automáticamente.</p>
             </div>
-            <div class="step">
+            <div class="step anim" style="transition-delay: 0.45s">
                 <div class="step-num">4</div>
                 <h3>Entrega</h3>
                 <p>El destinatario recibe una notificación.</p>
@@ -107,23 +115,24 @@
         </div>
     </section> 
 
+    <!-- QUIÉNES SOMOS -->
     <section class="quienes-somos" id="quienes somos">
-        <div class="qs-texto">
+        <div class="qs-texto anim">
             <h2>Quiénes somos</h2>
             <p>Somos un equipo apasionado por la tecnología y la salud. Desarrollamos Bit-Track Rover con el objetivo de optimizar la logística interna de los hospitales, reduciendo tiempos y mejorando la atención al paciente.</p>
         </div>
         <div class="equipo">
-            <div class="miembro">
+            <div class="miembro anim" style="transition-delay: 0s">
                 <div class="circulo">MC</div>
-                <h3>Malek Chehid</h3>
+                <h3>Malek Cheheid</h3>
                 <span>Lider del proyecto</span>
             </div>
-            <div class="miembro">
+            <div class="miembro anim" style="transition-delay: 0.15s">
                 <div class="circulo">TL</div>
                 <h3>Teo Laguna</h3>
                 <span>Diseño web</span>
             </div>
-            <div class="miembro">
+            <div class="miembro anim" style="transition-delay: 0.3s">
                 <div class="circulo">SO</div>
                 <h3>Santiago Osma</h3>
                 <span>Programador</span>
@@ -133,7 +142,7 @@
 
     <!-- LOGIN -->
     <section class="sectionl" id="login">
-        <div class="wrapper-login">
+        <div class="wrapper-login anim">
             <h2>INICIAR SESION</h2>
             <div id="login-error" style="display:none;color:#e74c3c;font-size:.9em;margin-bottom:10px;text-align:center"></div>
             <div class="input-box">
@@ -153,6 +162,16 @@
         </div>
     </section>
 
+    <footer>
+        <a href="#" class="logo-footer">Bit-track rover</a>
+        <nav class="footer-nav">
+            <a href="#quienes somos">Quiénes somos</a>
+            <a href="#">Contacto</a>
+            <a href="#">Reseñas</a>
+        </nav>
+        <p>© 2026 Orvion Robotics. Todos los derechos reservados.</p>
+    </footer>
+
     <script>
         const API = "api.php";
 
@@ -161,6 +180,73 @@
             window.location.href = "home.html";
         }
 
+        // ============================================
+        // MODO OSCURO
+        // ============================================
+        const btnTema = document.getElementById("btn-tema");
+        if (localStorage.getItem("tema") === "dark") {
+            document.body.classList.add("dark");
+            btnTema.textContent = "☀️";
+        }
+        btnTema.addEventListener("click", () => {
+            document.body.classList.toggle("dark");
+            const esDark = document.body.classList.contains("dark");
+            btnTema.textContent = esDark ? "☀️" : "🌙";
+            localStorage.setItem("tema", esDark ? "dark" : "light");
+        });
+
+        // ============================================
+        // ANIMACIONES AL HACER SCROLL
+        // ============================================
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll(".anim, .anim-left, .anim-right").forEach(el => {
+            observer.observe(el);
+        });
+
+        // ============================================
+        // CONTADOR ANIMADO EN STATS
+        // ============================================
+        function animarContador(el) {
+            const target = parseInt(el.dataset.target);
+            const prefix = el.dataset.prefix || "";
+            const suffix = el.dataset.suffix || "";
+            const duracion = 1500;
+            const inicio = Date.now();
+
+            const tick = () => {
+                const progreso = Math.min((Date.now() - inicio) / duracion, 1);
+                const easing = 1 - Math.pow(1 - progreso, 3);
+                const valor = Math.floor(easing * target);
+                el.textContent = prefix + valor.toLocaleString() + suffix;
+                if (progreso < 1) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+        }
+
+        // Arranca el contador cuando las stats entran en pantalla
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelectorAll(".stat-num[data-target]").forEach(el => {
+                        animarContador(el);
+                    });
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        statsObserver.observe(document.querySelector(".stats-bar"));
+
+        // ============================================
+        // LOGIN
+        // ============================================
         document.getElementById("btn-login").addEventListener("click", async () => {
             const email    = document.getElementById("login-email").value.trim();
             const password = document.getElementById("login-password").value;
@@ -198,19 +284,9 @@
                 console.error(e);
             }
 
-            btn.textContent = "login";
+            btn.textContent = "Iniciar sesión";
             btn.disabled = false;
         });
     </script>
-
-    <footer>
-        <a href="#" class="logo-footer">Bit-track rover</a>
-        <nav class="footer-nav">
-            <a href="#quienes somos">Quiénes somos</a>
-            <a href="#">Contacto</a>
-            <a href="#">Reseñas</a>
-        </nav>
-        <p>© 2026 Orvion Robotics. Todos los derechos reservados.</p>
-    </footer>
 </body>
 </html>

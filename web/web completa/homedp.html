@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="logo.png-removebg-preview.png" type="image/x-icon">
-    <link rel="stylesheet" href="stylesdp.css?v=2">
-    <title>Mis datos</title>
+    <link rel="stylesheet" href="stylesdp.css?v=3">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Mis datos — Bit-Track Rover</title>
 </head>
-
 <body>
     <header class="header">
         <a href="index.html" class="logo">
@@ -17,15 +17,16 @@
             <a href="homemirover.html">Mi rover</a>
             <a href="home.html">Home</a>
             <a href="index.html">inicio</a>
+            <button class="btn-tema" id="btn-tema">🌙</button>
         </nav>
     </header>
 
     <main class="home-page">
-        <h1 class="bienvenido">Bienvenido, <span id="nombre-usuario">...</span></h1>
-        <p class="subtitulo">Panel de tu institución</p>
+        <h1 class="bienvenido anim">Bienvenido, <span id="nombre-usuario">...</span></h1>
+        <p class="subtitulo anim" style="transition-delay:.1s">Panel de tu institución</p>
 
         <div class="panel">
-            <div class="card">
+            <div class="card anim-left" style="transition-delay:.1s">
                 <h3>Datos del usuario</h3>
                 <div class="dato">
                     <div class="dato-label">Nombre completo</div>
@@ -41,7 +42,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card anim-left" style="transition-delay:.25s">
                 <h3>Datos institucionales</h3>
                 <div class="dato">
                     <div class="dato-label">Hospital o clínica</div>
@@ -52,7 +53,7 @@
                     <div class="dato-valor" id="d-ciudad">—</div>
                 </div>
                 <div class="dato">
-                    <div class="dato-label">Modelo del rover</div>
+                    <div class="dato-label">Código del rover</div>
                     <div class="dato-valor" id="d-modelo">—</div>
                 </div>
             </div>
@@ -60,22 +61,41 @@
     </main>
 
     <script>
-        // Si no hay sesión, redirigir al login
+        // Proteger página
         const usuarioGuardado = sessionStorage.getItem("usuario");
-        if (!usuarioGuardado) {
-            window.location.href = "index.html";
-        }
-
-        // Llenar los datos con lo guardado en sessionStorage
+        if (!usuarioGuardado) window.location.href = "index.html";
         const u = JSON.parse(usuarioGuardado);
 
+        // Llenar datos
         document.getElementById("nombre-usuario").textContent = u.nombre;
-        document.getElementById("d-nombre").textContent       = u.nombre;
-        document.getElementById("d-email").textContent        = u.email;
-        document.getElementById("d-rover").textContent        = u.robot_codigo  || "sin asignar";
-        document.getElementById("d-hospital").textContent     = u.hospital       || "—";
-        document.getElementById("d-ciudad").textContent       = u.ciudad         || "—";
-        document.getElementById("d-modelo").textContent = u.robot_codigo || "—";
+        document.getElementById("d-nombre").textContent   = u.nombre;
+        document.getElementById("d-email").textContent    = u.email;
+        document.getElementById("d-rover").textContent    = u.robot_codigo  || "sin asignar";
+        document.getElementById("d-hospital").textContent = u.hospital      || "—";
+        document.getElementById("d-ciudad").textContent   = u.ciudad        || "—";
+        document.getElementById("d-modelo").textContent   = u.robot_codigo  || "—";
+
+        // MODO OSCURO / CLARO
+        const btnTema = document.getElementById("btn-tema");
+        if (localStorage.getItem("tema") === "light") {
+            document.body.classList.add("light");
+            btnTema.textContent = "☀️";
+        }
+        btnTema.addEventListener("click", () => {
+            document.body.classList.toggle("light");
+            const esLight = document.body.classList.contains("light");
+            btnTema.textContent = esLight ? "☀️" : "🌙";
+            localStorage.setItem("tema", esLight ? "light" : "dark");
+        });
+
+        // ANIMACIONES
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add("visible");
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll(".anim, .anim-left").forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
