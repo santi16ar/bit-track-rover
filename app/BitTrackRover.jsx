@@ -45,22 +45,56 @@ function Reveal({ tag = "div", className = "", style, children, delay = 0, thres
 }
 
 /* 
-   ICONO DE MARCA 
+   ICONO DE MARCA - logo neon (círculo + flecha) transparente para claro/oscuro
+   Si tenés el PNG original, podés reemplazar LOGO_SRC por "/logo.png" o importarlo
  */
+const LOGO_SRC = ""; // opcional: deja vacío para usar SVG, o poné "data:image/png;base64,..." / "/logo.png"
+
 function LogoIcon({ size = 34 }) {
+  if (LOGO_SRC) {
+    return <img src={LOGO_SRC} width={size} height={size} alt="Bit-track" style={{ objectFit: "contain", display: "block" }} />;
+  }
   return (
-    <svg width={size} height={size} viewBox="0 0 48 48" fill="none">
-      <rect x="6" y="16" width="36" height="20" rx="6" fill="url(#bt-grad)" />
-      <circle cx="14" cy="38" r="5" fill="#0b0f19" stroke="url(#bt-grad)" strokeWidth="2" />
-      <circle cx="34" cy="38" r="5" fill="#0b0f19" stroke="url(#bt-grad)" strokeWidth="2" />
-      <rect x="18" y="10" width="12" height="8" rx="2" fill="url(#bt-grad)" />
-      <path d="M22 24h4v3h3v4h-3v3h-4v-3h-3v-4h3v-3z" fill="#fff" />
-      <defs>
-        <linearGradient id="bt-grad" x1="0" y1="0" x2="48" y2="48">
-          <stop offset="0" stopColor="#0066ff" />
-          <stop offset="1" stopColor="#00b4d8" />
-        </linearGradient>
-      </defs>
+    <svg
+      width={size}
+      height={size}
+      viewBox="10 0 90 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ display: "block", overflow: "visible" }}
+    >
+      {/* anillo exterior con apertura */}
+      <path
+        d="M 56.9 19.7 L 52.5 19.1 L 48.2 19.1 L 43.8 19.6 L 39.6 20.7 L 35.5 22.3 L 31.7 24.5 L 28.3 27.2 L 25.2 30.3 L 22.5 33.7 L 20.3 37.5 L 18.7 41.6 L 17.6 45.8 L 17.1 50.2 L 17.1 54.5 L 17.7 58.9 L 18.9 63.1 L 20.6 67.1 L 22.9 70.8 L 25.6 74.3 L 28.8 77.3 L 32.3 79.9 L 36.2 82.0 L 40.2 83.5 L 44.5 84.5 L 48.8 85.0 L 53.2 84.8 L 57.5 84.1 L 61.7 82.8 L 65.7 81.0 L 69.4 78.7 L 72.8 75.9 L 75.7 72.7 L 78.2 69.1 L 80.2 65.2 L 81.7 61.1 L 82.6 56.8 L 83.0 52.5 L 82.8 48.1 L 82.0 43.8 L 80.6 39.6"
+        stroke="#FFB030"
+        strokeWidth="6"
+        strokeLinecap="round"
+        fill="none"
+        style={{ filter: "drop-shadow(0 0 4px rgba(255,176,48,.7))" }}
+      />
+      {/* anillo interior con apertura */}
+      <path
+        d="M 54.8 29.5 L 51.8 29.1 L 48.7 29.0 L 45.7 29.4 L 42.7 30.2 L 39.9 31.3 L 37.3 32.8 L 34.9 34.7 L 32.7 36.9 L 30.8 39.3 L 29.3 41.9 L 28.2 44.7 L 27.4 47.7 L 27.0 50.7 L 27.1 53.8 L 27.5 56.8 L 28.3 59.7 L 29.5 62.5 L 31.1 65.1 L 33.0 67.5 L 35.2 69.6 L 37.7 71.4 L 40.4 72.9 L 43.2 74.0 L 46.2 74.7 L 49.2 75.0 L 52.2 74.9 L 55.3 74.4 L 58.2 73.5 L 60.9 72.2 L 63.5 70.6 L 65.9 68.7 L 67.9 66.4 L 69.7 63.9 L 71.1 61.2 L 72.1 58.3 L 72.8 55.4 L 73.0 52.3 L 72.8 49.3 L 72.3 46.3 L 71.3 43.4"
+        stroke="#FFB030"
+        strokeWidth="6"
+        strokeLinecap="round"
+        fill="none"
+        style={{ filter: "drop-shadow(0 0 3px rgba(255,176,48,.6))" }}
+      />
+      {/* cuerpo de la flecha */}
+      <path
+        d="M 30.7 75.0 L 73.14 23.32"
+        stroke="#FFB030"
+        strokeWidth="5.5"
+        strokeLinecap="round"
+        style={{ filter: "drop-shadow(0 0 4px rgba(255,176,48,.7))" }}
+      />
+      {/* punta de la flecha (triángulo simétrico) */}
+      <polygon
+        points="86,8 79.82,25.01 70.32,17.04"
+        fill="#FFB030"
+        style={{ filter: "drop-shadow(0 0 4px rgba(255,176,48,.7))" }}
+      />
     </svg>
   );
 }
@@ -82,7 +116,7 @@ const USUARIOS_LOCALES = [
 
 export default function BitTrackRoverApp() {
   const [page, setPage] = useState("welcome"); // welcome | login | home | datos | mirover
-  const [theme, setTheme] = useState("light"); // toggle unico para toda la app
+  const [theme, setTheme] = useState("dark"); // toggle unico para toda la app - default oscuro
   const [usuario, setUsuario] = useState(null);
 
   const [loginError, setLoginError] = useState("");
@@ -127,12 +161,11 @@ export default function BitTrackRoverApp() {
     <div className={`bt-root theme-${theme}`}>
       <style>{CSS}</style>
       {page === "welcome" && (
-        <WelcomePage theme={theme} toggleTheme={toggleTheme} goTo={goTo} />
+        <WelcomePage theme={theme} goTo={goTo} />
       )}
       {page === "login" && (
         <LoginPage
           theme={theme}
-          toggleTheme={toggleTheme}
           onLogin={handleLogin}
           loginError={loginError}
           goTo={goTo}
@@ -140,20 +173,20 @@ export default function BitTrackRoverApp() {
       )}
       {page === "home" && usuario && (
         <div className="bt-app">
-          <HomePage usuario={usuario} theme={theme} toggleTheme={toggleTheme} onLogout={handleLogout} goTo={goTo} />
-          <BottomBar theme={theme} toggleTheme={toggleTheme} page={page} goTo={goTo} onLogout={handleLogout} />
+          <HomePage usuario={usuario} theme={theme} onLogout={handleLogout} goTo={goTo} />
+          <BottomBar theme={theme} page={page} goTo={goTo} />
         </div>
       )}
       {page === "datos" && usuario && (
         <div className="bt-app">
-          <DatosPage usuario={usuario} theme={theme} toggleTheme={toggleTheme} goTo={goTo} />
-          <BottomBar theme={theme} toggleTheme={toggleTheme} page={page} goTo={goTo} onLogout={handleLogout} />
+          <DatosPage usuario={usuario} theme={theme} toggleTheme={toggleTheme} onLogout={handleLogout} goTo={goTo} />
+          <BottomBar theme={theme} page={page} goTo={goTo} />
         </div>
       )}
       {page === "mirover" && usuario && (
         <div className="bt-app">
-          <RoverPage usuario={usuario} onLogout={handleLogout} goTo={goTo} />
-          <BottomBar theme={theme} toggleTheme={toggleTheme} page={page} goTo={goTo} onLogout={handleLogout} />
+          <RoverPage usuario={usuario} theme={theme} onLogout={handleLogout} goTo={goTo} />
+          <BottomBar theme={theme} page={page} goTo={goTo} />
         </div>
       )}
       {(page === "home" || page === "datos" || page === "mirover") && !usuario && (
@@ -171,7 +204,7 @@ export default function BitTrackRoverApp() {
 /* 
    BIENVENIDA (pantalla inicial sin landing)
  */
-function WelcomePage({ theme, toggleTheme, goTo }) {
+function WelcomePage({ theme, goTo }) {
   return (
     <div className={`bt-welcome ${theme === "dark" ? "dark" : ""}`}>
       <header className="header">
@@ -180,7 +213,6 @@ function WelcomePage({ theme, toggleTheme, goTo }) {
           Bit-track rover
         </a>
         <nav className="nav">
-          <button className="btn-tema" onClick={toggleTheme}>{theme === "dark" ? "☀️" : "🌙"}</button>
         </nav>
       </header>
 
@@ -199,7 +231,7 @@ function WelcomePage({ theme, toggleTheme, goTo }) {
 /* 
    INICIAR SESION
  */
-function LoginPage({ theme, toggleTheme, onLogin, loginError, goTo }) {
+function LoginPage({ theme, onLogin, loginError, goTo }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -221,7 +253,6 @@ function LoginPage({ theme, toggleTheme, onLogin, loginError, goTo }) {
           Bit-track rover
         </a>
         <nav className="nav">
-          <button className="btn-tema" onClick={toggleTheme}>{theme === "dark" ? "☀️" : "🌙"}</button>
         </nav>
       </header>
 
@@ -258,7 +289,7 @@ function LoginPage({ theme, toggleTheme, onLogin, loginError, goTo }) {
 /* 
    HOME (home.html)
  */
-function HomePage({ usuario, theme, toggleTheme, onLogout, goTo }) {
+function HomePage({ usuario, theme, onLogout, goTo }) {
   return (
     <div className={`bt-home ${theme === "light" ? "light" : ""}`}>
       <section className="section">
@@ -292,7 +323,7 @@ function HomePage({ usuario, theme, toggleTheme, onLogout, goTo }) {
 /*
    DATOS PERSONALES (homedp.html)
  */
-function DatosPage({ usuario, theme, toggleTheme, goTo }) {
+function DatosPage({ usuario, theme, toggleTheme, onLogout, goTo }) {
   return (
     <div className={`bt-datos ${theme === "light" ? "light" : ""}`}>
       <main className="home-page">
@@ -331,6 +362,32 @@ function DatosPage({ usuario, theme, toggleTheme, goTo }) {
               <div className="dato-valor">{usuario.robot_codigo || "—"}</div>
             </div>
           </Reveal>
+
+          <Reveal tag="div" className="card anim-left" delay={0.35}>
+            <h3>Apariencia</h3>
+            <div className="dato">
+              <div className="dato-label">Tema</div>
+              <div className="dato-valor" style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <span>{theme === "dark" ? "Modo oscuro" : "Modo claro"}</span>
+                <button
+                  className={`theme-switch ${theme === "dark" ? "dark" : ""}`}
+                  onClick={toggleTheme}
+                  aria-label="cambiar tema"
+                  title={theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
+                >
+                  <span className="theme-switch-knob" />
+                </button>
+              </div>
+            </div>
+            <p style={{ fontSize: ".82em", opacity: 0.6, marginTop: 10 }}>
+              Cambiá entre modo oscuro y claro desde tu perfil.
+            </p>
+          </Reveal>
+        </div>
+        <div className="perfil-logout-wrap">
+          <button className="btn-perfil-logout" onClick={onLogout}>
+            Cerrar sesión
+          </button>
         </div>
       </main>
     </div>
@@ -340,7 +397,7 @@ function DatosPage({ usuario, theme, toggleTheme, goTo }) {
 /* 
    MI ROVER (homemirover.html)
  */
-function RoverPage({ usuario, onLogout, goTo }) {
+function RoverPage({ usuario, theme, onLogout, goTo }) {
   const [bateria, setBateria] = useState(87);
   const [llamando, setLlamando] = useState(false);
   const [estadoLlamada, setEstadoLlamada] = useState("");
@@ -380,7 +437,7 @@ function RoverPage({ usuario, onLogout, goTo }) {
   const bateriaBaja = bateria < 30;
 
   return (
-    <div className="bt-rover">
+    <div className={`bt-rover ${theme === "light" ? "light" : ""}`}>
       <main>
         <p className="page-title">Panel de control</p>
         <h1 className="rover-nombre">{usuario.robot_codigo || "Sin rover"}</h1>
@@ -474,11 +531,11 @@ function RoverPage({ usuario, onLogout, goTo }) {
 /* 
    BARRA INFERIOR DE NAVEGACION
  */
-function BottomBar({ theme, toggleTheme, page, goTo, onLogout }) {
+function BottomBar({ theme, page, goTo }) {
   const tabs = [
     { id: "home", label: "Home", icon: "🏠" },
-    { id: "datos", label: "Datos", icon: "👤" },
     { id: "mirover", label: "Mi rover", icon: "🤖" },
+    { id: "datos", label: "Perfil", icon: "👤" },
   ];
 
   return (
@@ -493,12 +550,6 @@ function BottomBar({ theme, toggleTheme, page, goTo, onLogout }) {
           <span className="bt-tab-label">{t.label}</span>
         </button>
       ))}
-      <button className="bt-theme-btn" onClick={toggleTheme} aria-label="tema">
-        {theme === "dark" ? "☀️" : "🌙"}
-      </button>
-      <button className="bt-theme-btn bt-logout" onClick={onLogout} aria-label="salir">
-        ⏻
-      </button>
     </nav>
   );
 }
@@ -747,15 +798,16 @@ const CSS = `
 }
 
 /* =========================================================
-   MI ROVER (bt-rover)
+   MI ROVER (bt-rover) - unificado con estilo de la app
    ========================================================= */
 .bt-rover {
-  --primary:#0066ff; --accent:#00b4d8; --teal:#1f9d8a; --teal-bright:#00e5c8;
+  --primary:#0066ff; --accent:#00b4d8;
   --gradient:linear-gradient(135deg,#0066ff,#00b4d8);
-  --bg:#060d14; --bg-card:#0d1f2d; --bg-card-hover:#0f2533; --border:#ffffff12;
-  --text-muted:#5a7a8a; --shadow:0 8px 30px rgba(0,0,0,.35); --radius:16px;
-  background: var(--bg); color:#fff; min-height:100vh;
+  --bg:#0b0f19; --bg-card:#141b2d; --border:#ffffff12;
+  --text-muted:#94a3b8; --shadow-lg:0 16px 48px rgba(0,0,0,.5); --radius-lg:28px;
+  background: var(--bg); color:#fff; min-height:100vh; display:flex; flex-direction:column;
 }
+.bt-rover.light { background:#f5f7fb; color:#0f172a; }
 .bt-rover .header { position:fixed; top:0; left:0; width:100%; padding:14px 60px; background:rgba(10,30,45,.85); backdrop-filter:blur(14px); display:flex; justify-content:space-between; align-items:center; z-index:100; border-bottom:1px solid #ffffff0a; }
 .bt-rover .header .logo { display:flex; align-items:center; gap:10px; font-size:1.15em; font-weight:600; color:#fff; }
 .bt-rover .header nav { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
@@ -764,44 +816,51 @@ const CSS = `
 .bt-rover .btn-cerrar { padding:8px 20px; border-radius:40px; border:1px solid #ffffff40; background:transparent; color:#fff; font-size:.85em; cursor:pointer; margin-left:16px; }
 .bt-rover .btn-cerrar:hover { background:#ffffff15; border-color:#ffffff60; }
 
-.bt-rover main { padding:120px 40px 60px; max-width:1300px; margin:0 auto; }
-.bt-rover .page-title { font-size:.72em; text-transform:uppercase; letter-spacing:3px; color:var(--teal); margin-bottom:8px; }
-.bt-rover .rover-nombre { font-family:'Courier New', monospace; font-size:2.6em; font-weight:700; background:linear-gradient(90deg,#38bdf8,#00d4ff); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:4px; }
+.bt-rover main { padding:40px 80px 70px; max-width:1300px; margin:0 auto; width:100%; flex:1; background:linear-gradient(180deg,#0d1424 0%, var(--bg) 100%); }
+.bt-rover.light main { background:linear-gradient(180deg,#eef4ff 0%,#f5f7fb 100%); }
+.bt-rover .page-title { font-size:.72em; text-transform:uppercase; letter-spacing:3px; color:var(--accent); margin-bottom:8px; }
+.bt-rover .rover-nombre { font-size:2.4em; font-weight:800; letter-spacing:-1px; background:linear-gradient(90deg,#38bdf8,#00d4ff); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:4px; }
 .bt-rover .rover-subtitulo { color:var(--text-muted); font-size:.9em; margin-bottom:36px; }
 
-.bt-rover .grid-main { display:grid; grid-template-columns:320px 1fr; gap:16px; align-items:stretch; }
+.bt-rover .grid-main { display:grid; grid-template-columns:320px 1fr; gap:26px; align-items:stretch; }
 .bt-rover .col-izq, .bt-rover .col-der { display:flex; flex-direction:column; gap:16px; }
-.bt-rover .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:26px; position:relative; overflow:hidden; transition:.3s; }
-.bt-rover .card:hover { background:var(--bg-card-hover); box-shadow:var(--shadow); }
+.bt-rover .card { background:var(--bg-card); border:1px solid #ffffff12; border-radius:var(--radius-lg); padding:26px; position:relative; overflow:hidden; transition:.3s; box-shadow:var(--shadow-lg); }
+.bt-rover .card:hover { box-shadow:0 20px 50px rgba(0,0,0,.45); }
+.bt-rover.light .card { background:#fff; border:1px solid #e2e8f0; box-shadow:0 4px 16px rgba(0,0,0,.06); }
 .bt-rover .card-label { font-size:.68em; text-transform:uppercase; letter-spacing:2px; color:var(--text-muted); margin-bottom:14px; }
 .bt-rover .card-estado { display:flex; flex-direction:column; align-items:flex-start; gap:18px; }
-.bt-rover .estado-icono { width:74px; height:74px; border-radius:50%; background:#1f9d8a20; border:2px solid var(--teal); display:flex; align-items:center; justify-content:center; font-size:1.8em; }
-.bt-rover .estado-valor { font-size:1.7em; font-weight:700; color:var(--teal); margin-bottom:4px; }
+.bt-rover .estado-icono { width:74px; height:74px; border-radius:50%; background:rgba(0,102,255,.12); border:2px solid var(--primary); display:flex; align-items:center; justify-content:center; font-size:1.8em; }
+.bt-rover .estado-valor { font-size:1.7em; font-weight:800; color:var(--accent); margin-bottom:4px; }
+.bt-rover.light .estado-valor { color:var(--primary); }
 .bt-rover .estado-desc { color:var(--text-muted); font-size:.8em; line-height:1.5; }
-.bt-rover .bateria-numero { font-size:2.7em; font-weight:700; line-height:1; margin-bottom:14px; }
+.bt-rover .bateria-numero { font-size:2.7em; font-weight:800; line-height:1; margin-bottom:14px; color:#fff; }
+.bt-rover.light .bateria-numero { color:#0f172a; }
 .bt-rover .bateria-numero span:last-child { font-size:.4em; color:var(--text-muted); }
-.bt-rover .barra-container { background:#ffffff10; border-radius:4px; height:6px; overflow:hidden; }
-.bt-rover .barra-fill { height:100%; border-radius:4px; background:linear-gradient(90deg,var(--teal),var(--teal-bright)); transition:width 1s ease; }
-.bt-rover .bateria-estado { font-size:.74em; color:var(--teal); margin-top:8px; }
-.bt-rover .btn-llamar { width:100%; padding:14px; border:none; border-radius:12px; background:var(--gradient); color:#fff; font-weight:600; cursor:pointer; font-size:.95em; transition:.3s; }
-.bt-rover .btn-llamar:hover:not(:disabled) { transform:translateY(-2px); }
-.bt-rover .btn-llamar:disabled { opacity:.6; cursor:not-allowed; }
+.bt-rover .barra-container { background:#ffffff10; border-radius:999px; height:8px; overflow:hidden; }
+.bt-rover.light .barra-container { background:#e2e8f0; }
+.bt-rover .barra-fill { height:100%; border-radius:999px; background:var(--gradient); transition:width 1s ease; }
+.bt-rover .bateria-estado { font-size:.74em; color:var(--accent); margin-top:8px; }
+.bt-rover .btn-llamar { width:100%; padding:14px; border:none; border-radius:14px; background:var(--gradient); color:#fff; font-weight:600; cursor:pointer; font-size:.95em; transition:.3s; box-shadow:0 10px 24px rgba(0,102,255,.3); }
+.bt-rover .btn-llamar:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 14px 30px rgba(0,102,255,.4); }
+.bt-rover .btn-llamar:disabled { opacity:.6; cursor:not-allowed; transform:none; }
 .bt-rover .actividad-lista { margin-top:16px; display:flex; flex-direction:column; gap:10px; max-height:140px; overflow-y:auto; }
 .bt-rover .actividad-item { display:flex; align-items:center; gap:10px; font-size:.82em; color:var(--text-muted); }
-.bt-rover .actividad-dot { width:6px; height:6px; border-radius:50%; background:var(--teal-bright); flex-shrink:0; }
+.bt-rover .actividad-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); flex-shrink:0; }
 .bt-rover .actividad-texto { flex:1; color:#cfe3ea; }
+.bt-rover.light .actividad-texto { color:#334155; }
 .bt-rover .card-hardware { display:grid; grid-template-columns:repeat(4,1fr); gap:22px; padding:32px; }
 .bt-rover .hw-label { font-size:.68em; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-muted); margin-bottom:6px; }
 .bt-rover .hw-valor { font-size:.92em; color:#fff; font-weight:700; }
+.bt-rover.light .hw-valor { color:#0f172a; }
 .bt-rover .hw-sub { font-size:.72em; color:var(--text-muted); margin-top:2px; }
-.bt-rover .card img { width:100%; height:100%; object-fit:cover; display:block; min-height:180px; }
+.bt-rover .card img { width:100%; height:100%; object-fit:cover; display:block; min-height:180px; border-radius:var(--radius-lg); }
 
 @media (max-width: 900px) {
-  .bt-rover main { padding:100px 16px 40px; }
+  .bt-rover main { padding:30px 20px 40px; }
   .bt-rover .header { padding:10px 16px; }
   .bt-rover .header nav a { display:none; }
   .bt-rover .rover-nombre { font-size:2em; }
-  .bt-rover .grid-main { grid-template-columns:1fr; }
+  .bt-rover .grid-main { grid-template-columns:1fr; gap:16px; }
   .bt-rover .card-hardware { grid-template-columns:1fr 1fr; gap:18px; }
 }
 
@@ -961,4 +1020,38 @@ const CSS = `
   display:flex; align-items:center; justify-content:center; margin:0 2px;
 }
 .bt-logout { color:#e11d48; font-size:1.3em; }
+.bt-datos .theme-switch { width:52px; height:28px; border-radius:999px; border:none; background:#334155; position:relative; cursor:pointer; transition:.3s; padding:0; flex-shrink:0; }
+.bt-datos .theme-switch.dark { background:#00b4d8; }
+.bt-datos .theme-switch .theme-switch-knob { position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:50%; background:#fff; transition:.3s; box-shadow:0 2px 6px rgba(0,0,0,.2); display:block; }
+.bt-datos .theme-switch.dark .theme-switch-knob { transform:translateX(24px); }
+.bt-datos.light .theme-switch { background:#cbd5e1; }
+.bt-datos.light .theme-switch.dark { background:#0066ff; }
+/* fix titulos en negro -> blanco en modo oscuro */
+.bt-datos:not(.light) .bienvenido,
+.bt-datos:not(.light) .card h3,
+.bt-datos:not(.light) .dato-valor,
+.bt-datos:not(.light) h1,
+.bt-datos:not(.light) h2,
+.bt-datos:not(.light) h3 { color:#fff !important; }
+.bt-home:not(.light) .titulo-hero,
+.bt-home:not(.light) .contenido h2,
+.bt-home:not(.light) .contenido h3 { color:#fff !important; }
+.bt-welcome.dark .welcome-card h1,
+.bt-login.dark .wrapper-login h2 { color:#fff !important; }
+.bt-datos .perfil-logout-wrap { margin-top:28px; display:flex; justify-content:center; }
+.bt-datos .btn-perfil-logout {
+  background: transparent;
+  border:1.5px solid rgba(255,255,255,.14);
+  color:#94a3b8;
+  padding:11px 28px;
+  border-radius:30px;
+  cursor:pointer;
+  font-weight:600;
+  font-size:.92em;
+  transition:.25s;
+  backdrop-filter: blur(6px);
+}
+.bt-datos .btn-perfil-logout:hover { border-color:#e11d48; color:#fff; background: linear-gradient(135deg,#e11d48,#be123c); box-shadow:0 6px 18px rgba(225,29,72,.25); transform:translateY(-1px); }
+.bt-datos.light .btn-perfil-logout { border-color:#e2e8f0; color:#64748b; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.04); }
+.bt-datos.light .btn-perfil-logout:hover { border-color:#e11d48; color:#fff; background: linear-gradient(135deg,#e11d48,#be123c); }
 `;
