@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <title>bit-track rover</title>
 </head>
-<body>
+<body class="dark">
     <header class="header">
         <a href="#" class="logo">
             <img src="logo.png-removebg-preview.png" alt="" height="55px">Bit-track rover
@@ -18,8 +18,8 @@
             <a href="#caracteristicas">caracteristicas</a>
             <a href="#funcionamiento">funcionamiento</a>
             <a href="#beneficios">beneficios</a>
+            <a href="#faq">FAQ</a>
             <a href="#login" class="nav-cta">acceder</a>
-            <button class="btn-tema" id="btn-tema">🌙</button>
         </nav>
     </header>
 
@@ -140,6 +140,29 @@
         </div>
     </section>
 
+    <!-- FAQ -->
+    <section class="faq-section" id="faq">
+        <h2 class="faq-title anim">Preguntas frecuentes</h2>
+        <div class="faq-grid">
+            <div class="faq-item anim" style="transition-delay: 0s">
+                <h3>¿Necesita obras para instalarse?</h3>
+                <p>No. Solo se pega una línea guía en el piso. Instalación en menos de 1 día sin modificar la infraestructura.</p>
+            </div>
+            <div class="faq-item anim" style="transition-delay: 0.1s">
+                <h3>¿Qué pasa si alguien se cruza?</h3>
+                <p>El sensor infrarrojo detecta obstáculos y se detiene automáticamente hasta que el camino esté libre.</p>
+            </div>
+            <div class="faq-item anim" style="transition-delay: 0.2s">
+                <h3>¿Y si se queda sin batería?</h3>
+                <p>Avisa al 20% y vuelve solo a la base de carga. Autonomía de 12 horas, opera 24/7 con recarga automática.</p>
+            </div>
+            <div class="faq-item anim" style="transition-delay: 0.3s">
+                <h3>¿Es seguro para medicamentos?</h3>
+                <p>Sí. Compartimiento con traba y trazabilidad completa: quién lo envió, quién lo retiró y a qué hora.</p>
+            </div>
+        </div>
+    </section>
+
     <!-- LOGIN -->
     <section class="sectionl" id="login">
         <div class="wrapper-login anim">
@@ -179,21 +202,6 @@
         if (sessionStorage.getItem("usuario")) {
             window.location.href = "home.html";
         }
-
-        // ============================================
-        // MODO OSCURO
-        // ============================================
-        const btnTema = document.getElementById("btn-tema");
-        if (localStorage.getItem("tema") === "dark") {
-            document.body.classList.add("dark");
-            btnTema.textContent = "☀️";
-        }
-        btnTema.addEventListener("click", () => {
-            document.body.classList.toggle("dark");
-            const esDark = document.body.classList.contains("dark");
-            btnTema.textContent = esDark ? "☀️" : "🌙";
-            localStorage.setItem("tema", esDark ? "dark" : "light");
-        });
 
         // ============================================
         // ANIMACIONES AL HACER SCROLL
