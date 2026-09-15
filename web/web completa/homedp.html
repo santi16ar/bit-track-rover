@@ -14,10 +14,9 @@
             <img src="logo.png-removebg-preview.png" alt="" height="36px">Bit-track rover
         </a>
         <nav class="nav">
+            <a href="home.html">Panel</a>
             <a href="homemirover.html">Mi rover</a>
-            <a href="home.html">Home</a>
-            <a href="index.html">inicio</a>
-            <button class="btn-tema" id="btn-tema">🌙</button>
+            <button class="btn-cerrar" id="btn-cerrar" style="background:linear-gradient(135deg,#e11d48,#be123c);color:#fff;border:none;padding:9px 20px;border-radius:30px;cursor:pointer;font-weight:600;font-size:.9em;margin-left:8px">Cerrar sesión</button>
         </nav>
     </header>
 
@@ -75,18 +74,16 @@
         document.getElementById("d-ciudad").textContent   = u.ciudad        || "—";
         document.getElementById("d-modelo").textContent   = u.robot_codigo  || "—";
 
-        // MODO OSCURO / CLARO
-        const btnTema = document.getElementById("btn-tema");
-        if (localStorage.getItem("tema") === "light") {
-            document.body.classList.add("light");
-            btnTema.textContent = "☀️";
-        }
-        btnTema.addEventListener("click", () => {
-            document.body.classList.toggle("light");
-            const esLight = document.body.classList.contains("light");
-            btnTema.textContent = esLight ? "☀️" : "🌙";
-            localStorage.setItem("tema", esLight ? "light" : "dark");
+        const btnCerrar = document.getElementById("btn-cerrar");
+        if (btnCerrar) btnCerrar.addEventListener("click", () => {
+            sessionStorage.removeItem("usuario");
+            window.location.href = "index.html";
         });
+
+        // Fallback: si el observer falla, mostrar igual
+        setTimeout(() => {
+            document.querySelectorAll(".anim, .anim-left").forEach(el => el.classList.add("visible"));
+        }, 800);
 
         // ANIMACIONES
         const observer = new IntersectionObserver((entries) => {
