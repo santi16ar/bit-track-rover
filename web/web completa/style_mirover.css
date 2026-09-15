@@ -7,18 +7,18 @@
 :root {
     --primary: #0066ff;
     --accent: #00b4d8;
-    --teal: #1f9d8a;
-    --teal-bright: #00e5c8;
     --gradient: linear-gradient(135deg, #0066ff, #00b4d8);
-    --bg: #060d14;
-    --bg-card: #0d1f2d;
-    --bg-card-hover: #0f2533;
+    --bg: #0b0f19;
+    --bg-card: #141b2d;
+    --bg-card-hover: #1a2540;
     --border: #ffffff12;
     --text-main: #ffffff;
-    --text-muted: #5a7a8a;
+    --text-muted: #94a3b8;
     --text-soft: #8a9faf;
-    --shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
-    --radius: 16px;
+    --shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+    --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.06);
+    --radius: 18px;
+    --radius-lg: 28px;
 }
 
 body {
@@ -35,22 +35,24 @@ body {
     position: fixed;
     top: 0; left: 0;
     width: 100%;
-    padding: 14px 60px;
-    background: rgba(10, 30, 45, 0.85);
+    padding: 16px 80px;
+    background: rgba(11, 15, 25, 0.85);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 100;
-    border-bottom: 1px solid #ffffff0a;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06);
 }
 .header .logo {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 1.2em;
-    font-weight: 600;
+    font-size: 1.4em;
+    font-weight: 700;
+    letter-spacing: -0.3px;
     color: #fff;
     text-decoration: none;
 }
@@ -63,24 +65,14 @@ body {
 .header nav a {
     color: #b6c0d4;
     text-decoration: none;
-    font-size: 0.9em;
-    margin-left: 24px;
-    position: relative;
-    transition: color .3s;
+    font-size: 0.95em;
+    font-weight: 500;
+    margin-left: 8px;
+    padding: 8px 16px;
+    border-radius: 30px;
+    transition: color .3s, background .3s;
 }
-.header nav a:hover { color: var(--accent); }
-.header nav a::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -4px;
-    width: 0%;
-    height: 2px;
-    background: var(--accent);
-    border-radius: 5px;
-    transition: width 0.3s ease;
-}
-.header nav a:hover::after { width: 100%; }
+.header nav a:hover { color: var(--accent); background: rgba(0,180,216,0.1); }
 .btn-cerrar {
     padding: 8px 24px;
     border-radius: 40px;
@@ -107,13 +99,14 @@ main {
     font-size: 0.75em;
     text-transform: uppercase;
     letter-spacing: 3px;
-    color: var(--teal);
+    color: var(--accent);
     margin-bottom: 8px;
 }
 .rover-nombre {
-    font-family: 'Space Mono', monospace;
+    font-family: 'Poppins', sans-serif;
     font-size: 3em;
-    font-weight: 700;
+    font-weight: 800;
+    letter-spacing: -1px;
     background: linear-gradient(90deg, #38bdf8, #00d4ff);
     -webkit-background-clip: text;
     background-clip: text;
@@ -147,16 +140,16 @@ main {
    ============================================ */
 .card {
     background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border: 1px solid #ffffff12;
+    border-radius: var(--radius-lg);
     padding: 28px;
     position: relative;
     overflow: hidden;
+    box-shadow: var(--shadow);
     transition: transform .3s, box-shadow .3s, background .3s;
 }
 .card:hover {
     background: var(--bg-card-hover);
-    box-shadow: var(--shadow);
 }
 .card-label {
     font-size: 0.7em;
@@ -178,8 +171,8 @@ main {
 .estado-icono {
     width: 80px; height: 80px;
     border-radius: 50%;
-    background: #1f9d8a20;
-    border: 2px solid var(--teal);
+    background: rgba(0,102,255,0.12);
+    border: 2px solid var(--primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -187,13 +180,13 @@ main {
     animation: pulse 2s infinite;
 }
 @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 0 #1f9d8a40; }
-    50% { box-shadow: 0 0 0 16px #1f9d8a00; }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0,102,255,0.25); }
+    50% { box-shadow: 0 0 0 16px rgba(0,102,255,0); }
 }
 .estado-valor {
     font-size: 1.8em;
     font-weight: 700;
-    color: var(--teal);
+    color: var(--accent);
     margin-bottom: 4px;
 }
 .estado-desc {
@@ -201,6 +194,62 @@ main {
     font-size: 0.82em;
     line-height: 1.5;
 }
+.estado-toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px solid #ffffff12;
+    width: 100%;
+}
+.toggle-label {
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+    flex-shrink: 0;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 26px;
+    transition: .3s;
+}
+.slider:before {
+    content: "";
+    position: absolute;
+    height: 18px; width: 18px;
+    left: 3px; bottom: 3px;
+    background: #94a3b8;
+    border-radius: 50%;
+    transition: .3s;
+}
+.switch input:checked + .slider {
+    background: var(--gradient);
+    border-color: var(--primary);
+}
+.switch input:checked + .slider:before {
+    transform: translateX(22px);
+    background: #ffffff;
+}
+.switch input:focus + .slider { box-shadow: 0 0 0 3px rgba(0,102,255,0.2); }
+.card-estado.inactivo { opacity: .7; }
+.card-estado.inactivo .estado-icono {
+    background: rgba(100,116,139,0.15);
+    border-color: #475569;
+    animation: none;
+}
+.card-estado.inactivo .estado-valor { color: #94a3b8; }
 
 /* ============================================
    CARD BATERÍA
@@ -221,12 +270,12 @@ main {
 .barra-fill {
     height: 100%;
     border-radius: 4px;
-    background: linear-gradient(90deg, var(--teal), var(--teal-bright));
+    background: var(--gradient);
     transition: width 1s ease;
 }
 .bateria-estado {
     font-size: 0.75em;
-    color: var(--teal);
+    color: var(--accent);
     margin-top: 8px;
 }
 
@@ -258,8 +307,66 @@ main {
 }
 
 /* ============================================
-   IMAGEN DEL ROVER
-   ============================================ */
+    CONTROLES + ACTIVIDAD
+    ============================================ */
+.grid-secundaria {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+}
+.btn-llamar {
+    width: 100%;
+    background: var(--gradient);
+    color: #ffffff;
+    border: none;
+    padding: 16px 24px;
+    border-radius: 50px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1em;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0,102,255,.35);
+    transition: transform .2s, box-shadow .2s, opacity .2s;
+}
+.btn-llamar:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,102,255,.45); }
+.btn-llamar:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+.estado-llamada {
+    margin-top: 14px;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: .95em;
+    min-height: 1.4em;
+}
+.actividad-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 220px;
+    overflow-y: auto;
+}
+.actividad-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #ffffff08;
+    border: 1px solid #ffffff0f;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: .85em;
+}
+.actividad-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+}
+.actividad-texto { color: #ffffff; flex: 1; }
+.actividad-hora { color: var(--text-muted); font-size: .85em; }
+
+/* ============================================
+    IMAGEN DEL ROVER
+    ============================================ */
 .card img {
     width: 100%;
     height: 100%;
@@ -277,6 +384,7 @@ main {
     .header nav a { display: none; }
     .rover-nombre { font-size: 2em; }
     .grid-main { grid-template-columns: 1fr; }
+    .grid-secundaria { grid-template-columns: 1fr; }
     .card-hardware { grid-template-columns: 1fr 1fr; gap: 20px; }
 }
 @media (max-width: 480px) {
