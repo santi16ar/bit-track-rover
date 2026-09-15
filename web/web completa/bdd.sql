@@ -12,10 +12,10 @@ CREATE TABLE hospitales (
 
 INSERT INTO hospitales (nombre, ciudad) VALUES
   ('Hospital Italiano', 'Buenos Aires'),
-  ('Hospital Austral', 'Buenos Aires'),
-  ('Hospital Italiano', 'Buenos Aires'),
-  ('Hospital Clinica Jose de San Martin', 'Buenos Aires'),
-  ('Hospital Hospital Britanico de Buenos Aires', 'Buenos Aires');
+  ('Hospital Austral', 'Pilar'),
+  ('Hospital Clínica José de San Martín', 'Buenos Aires'),
+  ('Hospital Británico de Buenos Aires', 'Buenos Aires'),
+  ('Hospital Alemán', 'Buenos Aires');
   
 
 CREATE TABLE robots (
@@ -42,7 +42,10 @@ CREATE TABLE usuarios (
   nombre       VARCHAR(80)  NOT NULL,
   email        VARCHAR(120) NOT NULL UNIQUE,
   contrasena   VARCHAR(255) NOT NULL,
+  fk_hospital  INT NOT NULL,
   fk_robot     INT NULL,
+  CONSTRAINT fk_usuario_hospital FOREIGN KEY (fk_hospital)
+    REFERENCES hospitales(id_hospital) ON DELETE RESTRICT,
   CONSTRAINT fk_usuario_robot FOREIGN KEY (fk_robot)
     REFERENCES robots(id_robot) ON DELETE SET NULL
 );
