@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style_mirover.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style_mirover.css?v=2">
     <title>Mi Rover — Bit-Track</title>
 </head>
 <body>
@@ -14,9 +14,8 @@
         <img src="logo.png-removebg-preview.png" alt="">Bit-track rover
     </a>
     <nav>
-        <a href="home.html">Home</a>
+        <a href="home.html">Panel</a>
         <a href="homedp.html">Mis datos</a>
-        <a href="index.html">Inicio</a>
         <button class="btn-cerrar" id="btn-cerrar">Cerrar sesión</button>
     </nav>
 </header>
@@ -30,12 +29,19 @@
 
         <!-- COLUMNA IZQUIERDA: estado + batería -->
         <div class="col-izq">
-            <div class="card card-estado">
-                <div class="estado-icono">🟢</div>
+            <div class="card card-estado" id="card-estado">
+                <div class="estado-icono" id="estado-icono">🟢</div>
                 <div>
                     <p class="card-label">Estado actual</p>
-                    <p class="estado-valor">Activo</p>
-                    <p class="estado-desc">El rover está en espera y listo para recibir una orden.</p>
+                    <p class="estado-valor" id="estado-valor">Activo</p>
+                    <p class="estado-desc" id="estado-desc">El rover está en espera y listo para recibir una orden.</p>
+                </div>
+                <div class="estado-toggle">
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-rover" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="toggle-label" id="toggle-label">Encendido</span>
                 </div>
             </div>
 
@@ -79,6 +85,21 @@
             </div>
         </div>
 
+        <!-- CONTROLES + ACTIVIDAD (fix para JS existente) -->
+        <div class="grid-secundaria">
+            <div class="card card-control">
+                <p class="card-label">Control del rover</p>
+                <button id="btn-llamar" class="btn-llamar">Llamar al Rover</button>
+                <p id="estado-llamada" class="estado-llamada"></p>
+            </div>
+            <div class="card">
+                <p class="card-label">Actividad reciente</p>
+                <div id="actividad-lista" class="actividad-lista">
+                    <p style="color:var(--text-muted);font-size:.85em">Sin actividad aún. Llamá al rover para comenzar.</p>
+                </div>
+            </div>
+        </div>
+
     </div>
 </main>
 
@@ -111,8 +132,31 @@
     const btnLlamar = document.getElementById("btn-llamar");
     const estadoLlamada = document.getElementById("estado-llamada");
     const estados = ["Enviando orden...", "Rover en camino 🚗", "Llegando...", "✅ Rover llegó"];
+    const toggleRover = document.getElementById("toggle-rover");
+    const toggleLabel = document.getElementById("toggle-label");
+    const cardEstado = document.getElementById("card-estado");
+    const estadoIcono = document.getElementById("estado-icono");
+    const estadoValor = document.getElementById("estado-valor");
+    const estadoDesc = document.getElementById("estado-desc");
+    let roverActivo = true;
 
-    btnLlamar.addEventListener("click", () => {
+    function actualizarEstado(activo) {
+        roverActivo = activo;
+        toggleLabel.textContent = activo ? "Encendido" : "Apagado";
+        estadoIcono.textContent = activo ? "🟢" : "🔴";
+        estadoValor.textContent = activo ? "Activo" : "Inactivo";
+        estadoDesc.textContent = activo
+            ? "El rover está en espera y listo para recibir una orden."
+            : "El rover está desactivado. Actívalo para enviar órdenes.";
+        cardEstado.classList.toggle("inactivo", !activo);
+        btnLlamar.disabled = !activo;
+        if (!activo) estadoLlamada.textContent = "⚠ Rover desactivado";
+        else estadoLlamada.textContent = "";
+    }
+    if (toggleRover) toggleRover.addEventListener("change", () => actualizarEstado(toggleRover.checked));
+
+    if (btnLlamar && estadoLlamada) btnLlamar.addEventListener("click", () => {
+        if (!roverActivo) { estadoLlamada.textContent = "⚠ Activa el rover primero"; return; }
         btnLlamar.disabled = true;
         let i = 0;
         estadoLlamada.textContent = estados[i];
@@ -127,12 +171,16 @@
         }, 2000);
 
         const lista = document.getElementById("actividad-lista");
-        const ahora = new Date();
-        const hora = `${ahora.getHours()}:${String(ahora.getMinutes()).padStart(2,"0")}`;
-        const item = document.createElement("div");
-        item.className = "actividad-item";
-        item.innerHTML = `<div class="actividad-dot"></div><span class="actividad-texto">Rover llamado</span><span class="actividad-hora">${hora}</span>`;
-        lista.prepend(item);
+        if (lista) {
+            // limpiar placeholder
+            if (lista.querySelector("p")) lista.innerHTML = "";
+            const ahora = new Date();
+            const hora = `${ahora.getHours()}:${String(ahora.getMinutes()).padStart(2,"0")}`;
+            const item = document.createElement("div");
+            item.className = "actividad-item";
+            item.innerHTML = `<div class="actividad-dot"></div><span class="actividad-texto">Rover llamado</span><span class="actividad-hora">${hora}</span>`;
+            lista.prepend(item);
+        }
     });
 </script>
 
