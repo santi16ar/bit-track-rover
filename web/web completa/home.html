@@ -15,9 +15,7 @@
         </a>
         <nav class="nav">
             <a href="homemirover.html">Mi rover</a>
-            <a href="homedp.html">Datos Personales</a>
-            <a href="index.html">inicio</a>
-            <button class="btn-tema" id="btn-tema">🌙</button>
+            <a href="homedp.html">Mis datos</a>
             <button class="btn-cerrar" id="btn-cerrar">Cerrar sesión</button>
         </nav>
     </header>
@@ -34,7 +32,7 @@
                 <h2>TOCA ACA PARA LLAMAR A TU ROVER</h2>
                 <a href="homemirover.html">Llamar al Rover</a>
                 <h2>SOPORTE</h2>
-                <a href="#">soporte</a>
+                <a href="index.html#faq">Preguntas frecuentes</a>
             </div>
         </div>
         <div class="imgh1 anim-right">
@@ -43,11 +41,11 @@
     </section>
 
     <footer>
-        <a href="#" class="logo-footer">Bit-track rover</a>
+        <a href="index.html" class="logo-footer">Bit-track rover</a>
         <nav class="footer-nav">
-            <a href="#">Quiénes somos</a>
-            <a href="#">Contacto</a>
-            <a href="#">Reseñas</a>
+            <a href="index.html#quienes somos">Quiénes somos</a>
+            <a href="index.html#faq">FAQ</a>
+            <a href="index.html#login">Contacto</a>
         </nav>
         <p>© 2026 Orvion Robotics. Todos los derechos reservados.</p>
     </footer>
@@ -66,24 +64,6 @@
         document.getElementById("btn-cerrar").addEventListener("click", () => {
             sessionStorage.removeItem("usuario");
             window.location.href = "index.html";
-        });
-
-        // ============================================
-        // MODO OSCURO / CLARO
-        // ============================================
-        const btnTema = document.getElementById("btn-tema");
-
-        // Recordar preferencia
-        if (localStorage.getItem("tema") === "light") {
-            document.body.classList.add("light");
-            btnTema.textContent = "☀️";
-        }
-
-        btnTema.addEventListener("click", () => {
-            document.body.classList.toggle("light");
-            const esLight = document.body.classList.contains("light");
-            btnTema.textContent = esLight ? "☀️" : "🌙";
-            localStorage.setItem("tema", esLight ? "light" : "dark");
         });
 
         // ============================================
