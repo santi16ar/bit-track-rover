@@ -529,25 +529,58 @@ function RoverPage({ usuario, theme, onLogout, goTo }) {
 }
 
 /* 
+   ICONOS SVG para la barra inferior - basados en tus fotos
+   (redibujados en vector para que no tengan fondo negro
+   y cambien de color con el tema / activo)
+*/
+function IconHome({ size = 26 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 3.2 1.6 10c-.6.4-.4 1.3.3 1.3h20.2c.7 0 .9-.9.3-1.3L12 3.2Z" />
+      <rect x="4" y="12.5" width="16" height="8.7" rx="1.5" />
+    </svg>
+  );
+}
+
+function IconRover({ size = 26 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="5.5" width="16" height="9.5" rx="1.2" opacity="0.75" />
+      <circle cx="7.6" cy="15.8" r="3" />
+      <circle cx="16.4" cy="15.8" r="3" />
+    </svg>
+  );
+}
+
+function IconUser({ size = 26 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="7.8" r="5.2" opacity="0.9" />
+      <path d="M3.5 21.5C3.5 16.8 7.2 14 12 14s8.5 2.8 8.5 7.5H3.5Z" />
+    </svg>
+  );
+}
+
+/* 
    BARRA INFERIOR DE NAVEGACION
- */
+*/
 function BottomBar({ theme, page, goTo }) {
   const tabs = [
-    { id: "home", label: "Home", icon: "🏠" },
-    { id: "mirover", label: "Mi rover", icon: "🤖" },
-    { id: "datos", label: "Perfil", icon: "👤" },
+    { id: "home", label: "Home", Icon: IconHome },
+    { id: "mirover", label: "Mi rover", Icon: IconRover },
+    { id: "datos", label: "Perfil", Icon: IconUser },
   ];
 
   return (
     <nav className={`bt-bar ${theme === "dark" ? "dark" : ""}`}>
-      {tabs.map((t) => (
+      {tabs.map(({ id, label, Icon }) => (
         <button
-          key={t.id}
-          className={`bt-tab ${page === t.id ? "active" : ""}`}
-          onClick={() => goTo(t.id)}
+          key={id}
+          className={`bt-tab ${page === id ? "active" : ""}`}
+          onClick={() => goTo(id)}
         >
-          <span className="bt-tab-icon">{t.icon}</span>
-          <span className="bt-tab-label">{t.label}</span>
+          <span className="bt-tab-icon"><Icon size={26} /></span>
+          <span className="bt-tab-label">{label}</span>
         </button>
       ))}
     </nav>
@@ -1009,11 +1042,12 @@ const CSS = `
   color:#94a3b8; font-family:inherit; padding:8px 2px; border-radius:14px; transition:.25s;
 }
 .bt-bar.dark .bt-tab { color:#8a93a8; }
-.bt-tab-icon { font-size:1.35em; line-height:1; filter:grayscale(1) opacity(.7); transition:.25s; }
+.bt-tab-icon { display:flex; align-items:center; justify-content:center; line-height:1; opacity:.7; transition:.25s; }
+.bt-tab-icon svg { display:block; }
 .bt-tab-label { font-size:.72em; font-weight:600; }
 .bt-tab.active { color:#0066ff; }
 .bt-bar.dark .bt-tab.active { color:#00d4ff; }
-.bt-tab.active .bt-tab-icon { filter:none; opacity:1; transform:translateY(-2px); }
+.bt-tab.active .bt-tab-icon { opacity:1; transform:translateY(-2px); }
 .bt-theme-btn {
   align-self:center; width:40px; height:40px; border-radius:50%;
   background:transparent; border:none; cursor:pointer; font-size:1.15em;
