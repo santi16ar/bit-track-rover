@@ -2,7 +2,7 @@
 
 header("Content-Type: application/json; charset=utf-8");
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
@@ -102,6 +102,33 @@ try {
 
     unset($user['contrasena']);
     json_out(['ok' => true, 'usuario' => $user]);
+  }
+
+  if ($resource === 'cuenta' && $method === 'DELETE') {
+    $idUsuario = intval($body['id_usuario'] ?? 0);
+    $password  = $body['password'] ?? '';
+
+    if (!$idUsuario || !$password) {
+      json_out(['ok' => false, 'error' => 'Faltan datos para eliminar la cuenta'], 400);
+    }
+
+    $s = $db->prepare("SELECT id_usuario, contrasena, fk_robot FROM usuarios WHERE id_usuario = ?");
+    $s->execute([$idUsuario]);
+    $user = $s->fetch();
+
+    if (!$user || !password_verify($password, $user['contrasena'])) {
+      json_out(['ok' => false, 'error' => 'Contraseña incorrecta, no se pudo eliminar la cuenta'], 401);
+    }
+
+    $db->beginTransaction();
+    // Liberar el rover asignado para que quede disponible de nuevo
+    if (!empty($user['fk_robot'])) {
+      $db->prepare("UPDATE robots SET disponible = TRUE WHERE id_robot = ?")->execute([$user['fk_robot']]);
+    }
+    $db->prepare("DELETE FROM usuarios WHERE id_usuario = ?")->execute([$idUsuario]);
+    $db->commit();
+
+    json_out(['ok' => true, 'mensaje' => 'Cuenta y datos eliminados correctamente']);
   }
 
   json_out(['error' => 'Recurso no encontrado'], 404);
