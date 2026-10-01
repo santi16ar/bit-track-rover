@@ -7,10 +7,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
 
-define('DB_HOST', 'sql308.infinityfree.com');
-define('DB_USER', 'if0_42316669');   
-define('DB_PASS', 'aFZLljdcIM');       
-define('DB_NAME', 'if0_42316669_bit_track_rover');
+require_once __DIR__ . '/config.php'
 
 function getDB(): PDO {
   static $pdo = null;

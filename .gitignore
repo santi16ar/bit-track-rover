@@ -6,3 +6,4 @@
 .vs/
 .DS_Store
 Thumbs.db
+frontend/web/config.php
