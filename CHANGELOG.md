@@ -1,5 +1,14 @@
 # Changelog
 
+## [No publicado] - 2026-10-21
+
+### Agregado
+- Web: nueva página de `términos y condiciones` (`frontend/web/terms.html` + `frontend/web/stylesterms.css`) con 15 secciones, índice lateral fijo con resaltado de la sección activa y hoja de estilos de impresión.
+
+### Cambiado
+- Web: el enlace "términos y condiciones" del registro (`opc1.html`) ahora apunta a `terms.html` en lugar de al login.
+- Web: se agrega el enlace "Términos y condiciones" al pie de `index.html`.
+
 ## [No publicado] - 2026-09-30
 
 ### Agregado
