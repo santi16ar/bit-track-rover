@@ -26,36 +26,17 @@
     <p class="rover-subtitulo" id="rover-modelo">Cargando datos del rover...</p>
 
     <div class="grid-main">
-
-        <!-- COLUMNA IZQUIERDA: estado + batería -->
         <div class="col-izq">
-            <div class="card card-estado" id="card-estado">
-                <div class="estado-icono" id="estado-icono">🟢</div>
-                <div>
-                    <p class="card-label">Estado actual</p>
-                    <p class="estado-valor" id="estado-valor">Activo</p>
-                    <p class="estado-desc" id="estado-desc">El rover está en espera y listo para recibir una orden.</p>
-                </div>
-                <div class="estado-toggle">
-                    <label class="switch">
-                        <input type="checkbox" id="toggle-rover" checked>
-                        <span class="slider"></span>
-                    </label>
-                    <span class="toggle-label" id="toggle-label">Encendido</span>
-                </div>
-            </div>
-
-            <div class="card">
-                <p class="card-label">Batería</p>
-                <p class="bateria-numero"><span id="bateria-num">87</span><span>%</span></p>
-                <div class="barra-container">
-                    <div class="barra-fill" id="barra-fill" style="width:87%"></div>
-                </div>
-                <p class="bateria-estado" id="bateria-estado">● Cargando en base</p>
-            </div>
+            <section class="card card-control" aria-labelledby="control-bluetooth-titulo">
+                <p class="card-label" id="control-bluetooth-titulo">Control Bluetooth</p>
+                <p class="bluetooth-desc">Conectá el rover por Bluetooth para iniciar el control.</p>
+                <button id="btn-bluetooth" class="btn-bluetooth" type="button">Prender / conectar</button>
+                <p id="estado-bluetooth" class="estado-bluetooth" role="status" aria-live="polite">
+                    Desconectado. La conexión no enviará comandos de encendido o apagado hasta configurar el protocolo BLE del rover.
+                </p>
+            </section>
         </div>
 
-        <!-- COLUMNA DERECHA: hardware + fila inferior -->
         <div class="col-der">
             <div class="card card-hardware">
                 <div class="hw-item">
@@ -79,27 +60,10 @@
                     <p class="hw-sub">Por carga completa</p>
                 </div>
             </div>
-            <div class="card" style="padding:0; overflow:hidden;">
-                <img src="img1.jpg" alt="Rover" style="width:100%; height:100%; object-fit:cover; border-radius:16px; display:block;">
-            </div>
-            </div>
-        </div>
-
-        <!-- CONTROLES + ACTIVIDAD (fix para JS existente) -->
-        <div class="grid-secundaria">
-            <div class="card card-control">
-                <p class="card-label">Control del rover</p>
-                <button id="btn-llamar" class="btn-llamar">Llamar al Rover</button>
-                <p id="estado-llamada" class="estado-llamada"></p>
-            </div>
-            <div class="card">
-                <p class="card-label">Actividad reciente</p>
-                <div id="actividad-lista" class="actividad-lista">
-                    <p style="color:var(--text-muted);font-size:.85em">Sin actividad aún. Llamá al rover para comenzar.</p>
-                </div>
+            <div class="card card-foto-rover">
+                <img src="img1.jpg" alt="Rover">
             </div>
         </div>
-
     </div>
 </main>
 
@@ -118,68 +82,60 @@
         window.location.href = "index.html";
     });
 
-    let bateria = 87;
-    setInterval(() => {
-        if (bateria > 10) bateria -= 1;
-        document.getElementById("bateria-num").textContent = bateria;
-        document.getElementById("barra-fill").style.width = bateria + "%";
-        if (bateria < 30) {
-            document.getElementById("bateria-estado").textContent = "⚠ Batería baja";
-            document.getElementById("bateria-estado").style.color = "#e05c4a";
-        }
-    }, 30000);
+    const btnBluetooth = document.getElementById("btn-bluetooth");
+    const estadoBluetooth = document.getElementById("estado-bluetooth");
+    let dispositivoBluetooth = null;
 
-    const btnLlamar = document.getElementById("btn-llamar");
-    const estadoLlamada = document.getElementById("estado-llamada");
-    const estados = ["Enviando orden...", "Rover en camino 🚗", "Llegando...", "✅ Rover llegó"];
-    const toggleRover = document.getElementById("toggle-rover");
-    const toggleLabel = document.getElementById("toggle-label");
-    const cardEstado = document.getElementById("card-estado");
-    const estadoIcono = document.getElementById("estado-icono");
-    const estadoValor = document.getElementById("estado-valor");
-    const estadoDesc = document.getElementById("estado-desc");
-    let roverActivo = true;
-
-    function actualizarEstado(activo) {
-        roverActivo = activo;
-        toggleLabel.textContent = activo ? "Encendido" : "Apagado";
-        estadoIcono.textContent = activo ? "🟢" : "🔴";
-        estadoValor.textContent = activo ? "Activo" : "Inactivo";
-        estadoDesc.textContent = activo
-            ? "El rover está en espera y listo para recibir una orden."
-            : "El rover está desactivado. Actívalo para enviar órdenes.";
-        cardEstado.classList.toggle("inactivo", !activo);
-        btnLlamar.disabled = !activo;
-        if (!activo) estadoLlamada.textContent = "⚠ Rover desactivado";
-        else estadoLlamada.textContent = "";
+    function mostrarDesconexion() {
+        btnBluetooth.textContent = "Prender / conectar";
+        estadoBluetooth.textContent = "Bluetooth desconectado. No se envió un comando de apagado al rover.";
+        dispositivoBluetooth = null;
     }
-    if (toggleRover) toggleRover.addEventListener("change", () => actualizarEstado(toggleRover.checked));
 
-    if (btnLlamar && estadoLlamada) btnLlamar.addEventListener("click", () => {
-        if (!roverActivo) { estadoLlamada.textContent = "⚠ Activa el rover primero"; return; }
-        btnLlamar.disabled = true;
-        let i = 0;
-        estadoLlamada.textContent = estados[i];
-        const intervalo = setInterval(() => {
-            i++;
-            if (i < estados.length) {
-                estadoLlamada.textContent = estados[i];
-            } else {
-                clearInterval(intervalo);
-                setTimeout(() => { btnLlamar.disabled = false; estadoLlamada.textContent = ""; }, 3000);
+    async function conectarBluetooth() {
+        if (!navigator.bluetooth) {
+            estadoBluetooth.textContent = "Este navegador no permite Bluetooth Web. Probá con Chrome o Edge en una página HTTPS o localhost.";
+            return;
+        }
+
+        btnBluetooth.disabled = true;
+        estadoBluetooth.textContent = "Elegí el rover en la ventana de Bluetooth del navegador…";
+
+        try {
+            const dispositivo = await navigator.bluetooth.requestDevice({ acceptAllDevices: true });
+            if (!dispositivo.gatt) {
+                throw new Error("El dispositivo seleccionado no ofrece una conexión Bluetooth LE compatible.");
             }
-        }, 2000);
 
-        const lista = document.getElementById("actividad-lista");
-        if (lista) {
-            // limpiar placeholder
-            if (lista.querySelector("p")) lista.innerHTML = "";
-            const ahora = new Date();
-            const hora = `${ahora.getHours()}:${String(ahora.getMinutes()).padStart(2,"0")}`;
-            const item = document.createElement("div");
-            item.className = "actividad-item";
-            item.innerHTML = `<div class="actividad-dot"></div><span class="actividad-texto">Rover llamado</span><span class="actividad-hora">${hora}</span>`;
-            lista.prepend(item);
+            dispositivo.addEventListener("gattserverdisconnected", mostrarDesconexion);
+            await dispositivo.gatt.connect();
+            dispositivoBluetooth = dispositivo;
+            btnBluetooth.textContent = "Apagar / desconectar Bluetooth";
+            estadoBluetooth.textContent = `Bluetooth conectado a ${dispositivo.name || "el dispositivo seleccionado"}. No se envió un comando de encendido: falta definir el servicio y la característica BLE del rover.`;
+        } catch (error) {
+            if (error.name === "NotFoundError") {
+                estadoBluetooth.textContent = "No se seleccionó ningún dispositivo Bluetooth.";
+            } else {
+                estadoBluetooth.textContent = `No se pudo conectar por Bluetooth: ${error.message || "error desconocido"}`;
+            }
+        } finally {
+            btnBluetooth.disabled = false;
+        }
+    }
+
+    async function desconectarBluetooth() {
+        if (dispositivoBluetooth?.gatt?.connected) {
+            dispositivoBluetooth.gatt.disconnect();
+        } else {
+            mostrarDesconexion();
+        }
+    }
+
+    btnBluetooth.addEventListener("click", () => {
+        if (dispositivoBluetooth?.gatt?.connected) {
+            desconectarBluetooth();
+        } else {
+            conectarBluetooth();
         }
     });
 </script>
