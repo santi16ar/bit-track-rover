@@ -1,23 +1,10 @@
-#include <ESP32Servo.h>
-
 // --- CONSTANTES: Pines actualizados para ESP32 ---
-const int PIN_SERVO = 19;
 const int PIN_IN1 = 26;
 const int PIN_IN2 = 27;
 const int PIN_IN3 = 14;
 const int PIN_IN4 = 13;
 
-// --- VARIABLES ---
-const int anguloCerrado = 180;
-const int anguloAbierto = 90;
-const unsigned long tiempoMantenerAbierta = 6000;
-
-Servo motorTapa;
-
 void setup() {
-    motorTapa.attach(PIN_SERVO);
-    motorTapa.write(anguloCerrado);
-    
     pinMode(PIN_IN1, OUTPUT);
     pinMode(PIN_IN2, OUTPUT);
     pinMode(PIN_IN3, OUTPUT);
@@ -29,19 +16,11 @@ void setup() {
 void loop() {
     // Los motores avanzan de forma continua
     avanzarMotores();
-
-    // Puedes añadir aquí tu lógica para activar la apertura de la tapa
     
     delay(50);
 }
 
 // --- FUNCIONES ---
-void gestionarApertura() {
-    motorTapa.write(anguloAbierto);
-    delay(tiempoMantenerAbierta); 
-    motorTapa.write(anguloCerrado);
-}
-
 void avanzarMotores() {
     digitalWrite(PIN_IN1, HIGH);
     digitalWrite(PIN_IN2, LOW);
