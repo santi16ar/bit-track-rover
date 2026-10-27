@@ -1,4 +1,3 @@
-// --- CONSTANTES: Pines actualizados para ESP32 ---
 const int PIN_IN1 = 26;
 const int PIN_IN2 = 27;
 const int PIN_IN3 = 14;
@@ -9,21 +8,35 @@ void setup() {
     pinMode(PIN_IN2, OUTPUT);
     pinMode(PIN_IN3, OUTPUT);
     pinMode(PIN_IN4, OUTPUT);
-    
     Serial.begin(115200);
 }
 
 void loop() {
-    // Los motores avanzan de forma continua
     avanzarMotores();
-    
-    delay(50);
+    delay(2000);
+    girarDerecha();
+    delay(1000);
+    detenerMotores();
+    delay(1000);
 }
 
-// --- FUNCIONES ---
 void avanzarMotores() {
     digitalWrite(PIN_IN1, HIGH);
     digitalWrite(PIN_IN2, LOW);
+    digitalWrite(PIN_IN3, HIGH);
+    digitalWrite(PIN_IN4, LOW);
+}
+
+void girarDerecha() {
+    digitalWrite(PIN_IN1, HIGH);
+    digitalWrite(PIN_IN2, LOW);
+    digitalWrite(PIN_IN3, LOW);
+    digitalWrite(PIN_IN4, HIGH);
+}
+
+void girarIzquierda() {
+    digitalWrite(PIN_IN1, LOW);
+    digitalWrite(PIN_IN2, HIGH);
     digitalWrite(PIN_IN3, HIGH);
     digitalWrite(PIN_IN4, LOW);
 }
