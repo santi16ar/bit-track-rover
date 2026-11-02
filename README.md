@@ -30,7 +30,6 @@ Bit-Track-Rover es un carrito robotizado diseñado para transportar objetos entr
 - Sensores de línea (arrays de IR)
 - Batería recargable
 - Chasis y plataforma para carga
-- Módulo de comunicación (Bluetooth / Wi‑Fi) para la app
 - App móvil (Android/iOS) — prototipo
 
 ## Cómo contribuir
