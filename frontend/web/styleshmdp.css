@@ -231,6 +231,18 @@ body.light footer { background-color: #0b1820; }
     background: rgba(0, 180, 216, 0.08);
 }
 
+/* Estado de la conexión Bluetooth al "llamar" al rover */
+.contenido .estado-llamar {
+    font-size: 0.88em;
+    color: var(--text-muted);
+    margin: 10px 0 0;
+    min-height: 1.4em;
+}
+.contenido a.conectando {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
 /* Imagen */
 .imgh1 {
     flex: 1;

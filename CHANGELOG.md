@@ -42,3 +42,14 @@
 
 ### Cambiado
 - se actualiza el changelog
+
+## [No publicado] - 2026-11-03
+
+### Agregado
+- Web: el botón "Llamar al Rover" de `frontend/web/home.html` ahora intenta conectarse por Bluetooth (`navigator.bluetooth.requestDevice()` + GATT) en lugar de navegar a `homemirover.html`, y muestra el estado en vivo (`aria-live`): eligiendo dispositivo, conectado, cancelado, error o navegador sin soporte Bluetooth Web.
+- Web: botón "Contactar por WhatsApp" en la sección SOPORTE de `frontend/web/home.html`, con el mismo enlace `wa.me` del botón flotante.
+- Web: estilos `.estado-llamar` y `a.conectando` en `frontend/web/styleshmdp.css` (cache-bust a `?v=5`).
+
+### Cambiado
+- API: el registro de usuarios ya no tiene límite de rovers (`frontend/web/api.php`). Si no queda ningún rover libre, se da de alta uno nuevo en la misma transacción (código `ROB-XXX` y modelo `RoverXX` derivados del `id_robot`, con guard por si el código existiera) y se asigna al usuario, en vez de responder 409 "No hay rovers disponibles en ese hospital".
+- Web: el enlace "Contacto" de los pies de página de `home.html`, `index.html` y `terms.html` apunta ahora al mismo link de WhatsApp (`wa.me`) que el botón flotante, en lugar de `index.html#login` o `#`.

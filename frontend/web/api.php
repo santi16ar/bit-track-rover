@@ -52,21 +52,44 @@ try {
     $check->execute([$email]);
     if ($check->fetch()) json_out(['ok' => false, 'error' => 'Ya existe una cuenta con ese email'], 409);
 
-    $rcheck = $db->prepare("SELECT id_robot, codigo, modelo FROM robots WHERE disponible = TRUE LIMIT 1");
-    $rcheck->execute([]);
-    $robot = $rcheck->fetch();
-    if (!$robot) {
-      json_out(['ok' => false, 'error' => 'No hay rovers disponibles en ese hospital'], 409);
-    }
-
     $hash = password_hash($password, PASSWORD_BCRYPT);
 
     $db->beginTransaction();
+
+    // Rover libre para asignar. Si no queda ninguno, se da de alta uno nuevo
+    // para que el registro nunca frene por falta de flota.
+    $rcheck = $db->prepare("SELECT id_robot, codigo, modelo FROM robots WHERE disponible = TRUE ORDER BY id_robot LIMIT 1");
+    $rcheck->execute([]);
+    $robot = $rcheck->fetch();
+
+    if (!$robot) {
+      $alta = $db->prepare("INSERT INTO robots (codigo, modelo, disponible, fk_hospital) VALUES (?, ?, FALSE, ?)");
+      $alta->execute(['TMP-' . uniqid(), 'Rover nuevo', $hospitalId]);
+      $idRobot = intval($db->lastInsertId());
+
+      // Código y modelo derivados del id para que nunca se repitan
+      $codigo = 'ROB-' . str_pad((string) $idRobot, 3, '0', STR_PAD_LEFT);
+      $modelo = 'Rover' . str_pad((string) $idRobot, 2, '0', STR_PAD_LEFT);
+
+      // Si ese código ya existe en la tabla, lo desviamos para no romper la UNIQUE
+      $existe = $db->prepare("SELECT id_robot FROM robots WHERE codigo = ?");
+      $existe->execute([$codigo]);
+      if ($existe->fetch()) {
+        $codigo = 'ROB-' . $idRobot . '-' . strtoupper(substr(uniqid(), -4));
+      }
+
+      $db->prepare("UPDATE robots SET codigo = ?, modelo = ? WHERE id_robot = ?")
+         ->execute([$codigo, $modelo, $idRobot]);
+
+      $robot = ['id_robot' => $idRobot, 'codigo' => $codigo, 'modelo' => $modelo];
+    } else {
+      $db->prepare("UPDATE robots SET disponible = FALSE WHERE id_robot = ?")->execute([$robot['id_robot']]);
+    }
+
     $ins = $db->prepare("INSERT INTO usuarios (nombre, email, contrasena, fk_hospital, fk_robot) VALUES (?,?,?,?,?)");
     $ins->execute([$nombre, $email, $hash, $hospitalId, $robot['id_robot']]);
     $newId = $db->lastInsertId();
 
-    $db->prepare("UPDATE robots SET disponible = FALSE WHERE id_robot = ?")->execute([$robot['id_robot']]);
     $db->commit();
 
     json_out([
