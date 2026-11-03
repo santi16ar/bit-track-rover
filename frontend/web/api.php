@@ -7,7 +7,16 @@ header("Access-Control-Allow-Headers: Content-Type");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
 
-require_once __DIR__ . '/config.php'
+$configPath = __DIR__ . '/config.php';
+if (!file_exists($configPath)) {
+  http_response_code(500);
+  echo json_encode([
+    'ok'    => false,
+    'error' => 'Falta el archivo config.php en el servidor. Crealo en la misma carpeta que api.php definiendo DB_HOST, DB_NAME, DB_USER y DB_PASS con los datos de tu base de datos.'
+  ], JSON_UNESCAPED_UNICODE);
+  exit;
+}
+require_once $configPath;
 
 function getDB(): PDO {
   static $pdo = null;

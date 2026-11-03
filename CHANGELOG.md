@@ -53,3 +53,6 @@
 ### Cambiado
 - API: el registro de usuarios ya no tiene límite de rovers (`frontend/web/api.php`). Si no queda ningún rover libre, se da de alta uno nuevo en la misma transacción (código `ROB-XXX` y modelo `RoverXX` derivados del `id_robot`, con guard por si el código existiera) y se asigna al usuario, en vez de responder 409 "No hay rovers disponibles en ese hospital".
 - Web: el enlace "Contacto" de los pies de página de `home.html`, `index.html` y `terms.html` apunta ahora al mismo link de WhatsApp (`wa.me`) que el botón flotante, en lugar de `index.html#login` o `#`.
+
+### Corregido
+- API: se arregla un error de PHP en `frontend/web/api.php` que impedía conectar con la base de datos.
