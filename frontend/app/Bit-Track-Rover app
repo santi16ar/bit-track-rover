@@ -1,5 +1,7 @@
 
-// bit-Track Rover — versión React Native
+/**
+ * Bit-Track Rover — versión React Native
+ */
  
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import {
