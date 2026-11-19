@@ -1,68 +1,185 @@
+#include <Servo.h>
+
 // --- 1. Pines de los Motores (Puente H L298N) ---
 const int PIN_IN1 = 2;
 const int PIN_IN2 = 3;
 const int PIN_IN3 = 4;
 const int PIN_IN4 = 5;
 
+// --- Pines de Velocidad (PWM) ---
+const int ENA = 9;
+const int ENB = 10;
+const int velocidadMotor = 115;
+const int velocidadRetroceso = 145;
+const int velocidadGiro = 195; // Buen empuje para vencer patinaje en cartón
+
 // --- 2. Pines del Sensor Ultrasónico (HC-SR04) ---
 const int trigPin = 6;
 const int echoPin = 7;
+const long DISTANCIA_FRENO = 10; // 10 cm de detección
+
+// --- Tiempos de maniobra ---
+const int TIEMPO_ESPERA_OBSTACULO = 500; // Espera 0,5 segundos al detectar
+const int TIEMPO_RETROCESO = 320; // Retroceso para despegarse
+const int TIEMPO_GIRO_LARGO = 1650; // Giro amplio (más de 180° según tracción)
+
+// --- 3. Servo de la tapa ---
+Servo tapaServo;
+const int servoPin = 11;
+
+// --- 4. Buzzer ---
+const int buzzerPin = 8;
+const bool BUZZER_ACTIVO = false;
+const int FREC_ALTA = 2500;
+
+// --- Parámetros para la expo ---
+const int ESQUIVES_PARA_ABRIR = 3;
+const unsigned long TIEMPO_RECORRIDO = 50000;
+
+int contadorEsquives = 0;
+bool ultimoGiroDerecha = false;
+unsigned long ultimoTiempoTapa = 0;
 
 void setup() {
-  // Configurar pines de motores como salidas
   pinMode(PIN_IN1, OUTPUT);
   pinMode(PIN_IN2, OUTPUT);
   pinMode(PIN_IN3, OUTPUT);
   pinMode(PIN_IN4, OUTPUT);
+  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
 
-  // Configurar pines del sensor ultrasónico
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
+  pinMode(buzzerPin, OUTPUT);
+  digitalWrite(buzzerPin, LOW);
 
-  Serial.begin(9600);
+  tapaServo.attach(servoPin);
+  tapaServo.write(0);
+
+  sonarInicioSuave();
+  ultimoTiempoTapa = millis();
 }
 
 void loop() {
-  long distancia = medirDistancia();
+  long distancia = medirDistanciaEstable();
 
-  // Si detecta un obstáculo a menos de 20 cm
-  if (distancia > 0 && distancia < 20) {
+  if (distancia > 0 && distancia < DISTANCIA_FRENO) {
+    // 1. Detiene y espera 2 segundos
     detenerMotores();
-    delay(300); // Breve pausa
+    delay(TIEMPO_ESPERA_OBSTACULO);
 
-    retrocederMotores();
-    delay(600); // Retrocede durante medio segundo
+    // 2. Retrocede
+    retroceder();
+    delay(TIEMPO_RETROCESO);
 
-    girarDerecha();
-    delay(700); // Gira para cambiar de dirección y esquivar
+    detenerMotores();
+    delay(80);
+
+    // 3. Giro mucho más amplio alternando sentido
+    bool girarDerechaAhora = !ultimoGiroDerecha;
+    if (girarDerechaAhora) {
+      girarDerecha();
+    } else {
+      girarIzquierda();
+    }
+    delay(TIEMPO_GIRO_LARGO);
+
+    detenerMotores();
+    delay(100);
+
+    ultimoGiroDerecha = girarDerechaAhora;
+    contadorEsquives++;
   } 
   else {
-    // Si el camino está libre, avanza normal
     avanzarMotores();
   }
 
-  delay(50);
+  // Revisa apertura periódica de tapa para la expo
+  bool tocaPorEsquives = (contadorEsquives >= ESQUIVES_PARA_ABRIR);
+  bool tocaPorTiempo = (millis() - ultimoTiempoTapa >= TIEMPO_RECORRIDO);
+
+  if (tocaPorEsquives || tocaPorTiempo) {
+    activarTapaExpo();
+    contadorEsquives = 0;
+    ultimoTiempoTapa = millis();
+  }
+
+  delay(20);
 }
 
 // ==========================================
-// FUNCIONES DE MOVIMIENTO DE LOS MOTORES
+// TAPA PARA LA EXPO
+// ==========================================
+
+void activarTapaExpo() {
+  detenerMotores();
+  delay(120);
+
+  sonarAvisoTapa();
+  tapaServo.write(90);
+  delay(6000);
+
+  tapaServo.write(0);
+  delay(350);
+
+  if (ultimoGiroDerecha) {
+    girarIzquierda();
+  } else {
+    girarDerecha();
+  }
+  delay(400);
+  detenerMotores();
+  delay(80);
+}
+
+// ==========================================
+// SONIDOS
+// ==========================================
+
+void emitirPulso(int frecuencia, int duracionMs) {
+  if (BUZZER_ACTIVO) {
+    digitalWrite(buzzerPin, HIGH);
+    delay(duracionMs);
+    digitalWrite(buzzerPin, LOW);
+  } else {
+    tone(buzzerPin, frecuencia, duracionMs);
+    delay(duracionMs + 15);
+    noTone(buzzerPin);
+  }
+}
+
+void sonarInicioSuave() {
+  emitirPulso(FREC_ALTA - 400, 85);
+  delay(35);
+  emitirPulso(FREC_ALTA - 200, 85);
+  delay(35);
+  emitirPulso(FREC_ALTA, 120);
+  delay(120);
+}
+
+void sonarAvisoTapa() {
+  emitirPulso(FREC_ALTA - 200, 75);
+  delay(35);
+  emitirPulso(FREC_ALTA, 110);
+  delay(90);
+}
+
+// ==========================================
+// FUNCIONES DE MOVIMIENTO (IN1/IN2 invertidos)
 // ==========================================
 
 void avanzarMotores() {
+  analogWrite(ENA, velocidadMotor);
+  analogWrite(ENB, velocidadMotor);
   digitalWrite(PIN_IN1, HIGH);
   digitalWrite(PIN_IN2, LOW);
   digitalWrite(PIN_IN3, HIGH);
   digitalWrite(PIN_IN4, LOW);
 }
 
-void detenerMotores() {
-  digitalWrite(PIN_IN1, LOW);
-  digitalWrite(PIN_IN2, LOW);
-  digitalWrite(PIN_IN3, LOW);
-  digitalWrite(PIN_IN4, LOW);
-}
-
-void retrocederMotores() {
+void retroceder() {
+  analogWrite(ENA, velocidadRetroceso);
+  analogWrite(ENB, velocidadRetroceso);
   digitalWrite(PIN_IN1, LOW);
   digitalWrite(PIN_IN2, HIGH);
   digitalWrite(PIN_IN3, LOW);
@@ -70,26 +187,61 @@ void retrocederMotores() {
 }
 
 void girarDerecha() {
-  // Un motor gira hacia adelante y el otro hacia atrás para girar sobre su propio eje
+  analogWrite(ENA, velocidadGiro);
+  analogWrite(ENB, velocidadGiro);
   digitalWrite(PIN_IN1, HIGH);
   digitalWrite(PIN_IN2, LOW);
   digitalWrite(PIN_IN3, LOW);
   digitalWrite(PIN_IN4, HIGH);
 }
 
+void girarIzquierda() {
+  analogWrite(ENA, velocidadGiro);
+  analogWrite(ENB, velocidadGiro);
+  digitalWrite(PIN_IN1, LOW);
+  digitalWrite(PIN_IN2, HIGH);
+  digitalWrite(PIN_IN3, HIGH);
+  digitalWrite(PIN_IN4, LOW);
+}
+
+void detenerMotores() {
+  analogWrite(ENA, 0);
+  analogWrite(ENB, 0);
+  digitalWrite(PIN_IN1, LOW);
+  digitalWrite(PIN_IN2, LOW);
+  digitalWrite(PIN_IN3, LOW);
+  digitalWrite(PIN_IN4, LOW);
+}
+
 // ==========================================
-// FUNCIÓN PARA MEDIR DISTANCIA (ULTRASONIDO)
+// ULTRASONIDO CON FILTRO RÁPIDO
 // ==========================================
 
-long medirDistancia() {
+long medirDistanciaCruda() {
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
-  
-  long duracion = pulseIn(echoPin, HIGH, 30000); 
-  long distanciaCm = duracion * 0.034 / 2;
-  
-  return distanciaCm;
+
+  long duracion = pulseIn(echoPin, HIGH, 25000);
+  if (duracion == 0) return -1;
+  return duracion * 0.034 / 2;
 }
+
+long medirDistanciaEstable() {
+  long d1 = medirDistanciaCruda();
+  delay(6);
+  long d2 = medirDistanciaCruda();
+
+  if (d1 > 0 && d2 > 0) {
+    return (d1 + d2) / 2;
+  }
+  if (d1 > 0) return d1;
+  if (d2 > 0) return d2;
+  return -1;
+}
+
+
+
+
